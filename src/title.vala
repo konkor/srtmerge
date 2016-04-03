@@ -1,7 +1,7 @@
 /* -*- Mode: vala; indent-tabs-mode: nil; c-basic-offset: 4; tab-width: 4 -*-  */
 /*
  * title.vala
- * Copyright (C) 2016 Kapa <kkorienkov@gmail.com>
+ * Copyright (C) 2016 Kostiantyn Korienkov <kkorienkov [at] gmail.com>
  *
  * strmerge is free software: you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the
@@ -89,59 +89,5 @@ public class Title : GLib.Object {
     }
  }
 
-public class Font : GLib.Object {
 
-    public Font (Pango.FontDescription desc, string color_str = "#FFFFFF") {
-        color = color_str;
-        name = desc.get_family ();
-        if (desc.get_style () == Pango.Style.ITALIC)
-            italic = "-1";
-        else
-            italic = "0";
-        if (desc.get_weight () > Pango.Weight.NORMAL)
-            bold = "-1";
-        else
-            bold = "0";
-        size = "%.0f".printf (desc.get_size () / Pango.SCALE);
-        //Debug.info ("Font", size);
-    }
-
-    public string name {
-        get;
-        set;
-        default = "Sans";
-    }
-
-    public string bold {
-        get;
-        set;
-        default = "0";
-    }
-
-    public string italic {
-        get;
-        set;
-        default = "0";
-    }
-    public string size {
-        get;
-        set;
-        default = "22";
-    }
-
-    //private string _col = "#FFFFFF";
-    public string color {
-        get;
-        set;
-        default = "#FFFFFF";
-    }
-
-    private string _colass;
-    public string color_ass {
-        get {
-            _colass = color.substring (5,2) + color.substring (3,2) + color.substring (1,2);
-            return _colass;
-        }
-    }
-}
 

@@ -1,7 +1,7 @@
 /* -*- Mode: vala; indent-tabs-mode: nil; c-basic-offset: 4; tab-width: 4 -*-  */
 /*
  * debug.vala
- * Copyright (C) 2016 Kapa <kkorienkov@gmail.com>
+ * Copyright (C) 2016 Kostiantyn Korienkov <kkorienkov [at] gmail.com>
  *
  * srtmerge is free software: you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the

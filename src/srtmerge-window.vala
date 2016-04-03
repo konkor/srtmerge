@@ -1,7 +1,7 @@
 /* -*- Mode: vala; indent-tabs-mode: nil; c-basic-offset: 4; tab-width: 4 -*-  */
 /*
  * srtmerge-window.vala
- * Copyright (C) 2016 Kapa <kkorienkov@gmail.com>
+ * Copyright (C) 2016 Kostiantyn Korienkov <kkorienkov [at] gmail.com>
  *
  * srtmerge is free software: you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the
@@ -104,8 +104,8 @@ public class SrtmergeWindow : Gtk.Window {
         bool res = Processing.merge (source1.encoder, source1.uri,
                                      source2.encoder, source2.uri,
                                      source.encoder, source.uri,
-                                     new Font (source1.font_button.get_font_desc (), source1.color),
-                                     new Font (source2.font_button.get_font_desc (), source2.color));
+                                     new SrtFont (source1.font_button.get_font_desc (), source1.color),
+                                     new SrtFont (source2.font_button.get_font_desc (), source2.color));
         if (!res) {
             //error
         } else {

@@ -17,7 +17,7 @@ AM_CFLAGS =\
 bin_PROGRAMS = srtmerge
 
 srtmerge_SOURCES = \
-	srtmerge.vala config.vapi title.vala text.vala srtmerge-window.vala processing.vala debug.vala file-source.vala custom-file-chooser.vala
+	srtmerge.vala config.vapi title.vala text.vala srtmerge-window.vala processing.vala debug.vala file-source.vala custom-file-chooser.vala font.vala
 
 srtmerge_VALAFLAGS =  \
 	--pkg gtk+-3.0

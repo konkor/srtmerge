@@ -1,7 +1,7 @@
 /* -*- Mode: vala; indent-tabs-mode: nil; c-basic-offset: 4; tab-width: 4 -*-  */
 /*
  * processing.vala
- * Copyright (C) 2016 Kapa <kkorienkov@gmail.com>
+ * Copyright (C) 2016 Kostiantyn Korienkov <kkorienkov [at] gmail.com>
  *
  * srtmerge is free software: you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the
@@ -73,12 +73,12 @@ public class Processing {
         return merge (encoding[0], fname[0], encoding[1], fname[1], encoding[2], fname[2]);
     }
 
-    private static Font _f = new Font (Pango.FontDescription.from_string ("Normal bold 22"));
-    private static Font f1;
-    private static Font f2;
+    private static SrtFont _f = new SrtFont (Pango.FontDescription.from_string ("Normal bold 22"));
+    private static SrtFont f1;
+    private static SrtFont f2;
 
     public static bool merge (string enc1, string fn1, string enc2, string fn2, string enc3, string fn,
-                              Font? top_font = null, Font? bot_font = null) {
+                              SrtFont? top_font = null, SrtFont? bot_font = null) {
         GLib.List<Title> timeline1, timeline2;
 
         _top = true;
