@@ -33,6 +33,7 @@ public class SrtmergeWindow : Gtk.Window {
     private Gtk.Button button_go;
     private FileSource source1;
     private FileSource source2;
+    private FileSource source;
     
     protected void build () {
         set_position (Gtk.WindowPosition.CENTER);
@@ -72,7 +73,12 @@ public class SrtmergeWindow : Gtk.Window {
         source2 = new FileSource ("Bottom subtitle source", this);
         vbox1.add (source2);
 
-		set_default_size (640, 480);
+        vbox1.add (new Gtk.Separator (Gtk.Orientation.HORIZONTAL));
+
+        source = new FileSource ("Output subtitle source", this, false);
+        vbox1.add (source);
+
+		set_default_size (560, 480);
         show ();
     }
 
@@ -82,9 +88,29 @@ public class SrtmergeWindow : Gtk.Window {
 	}
 
     private void on_add_clicked () {
+        string[]? fnames = CustomFileChooser.get_filenames (this);
+        if (fnames != null) {
+            switch (fnames.length) {
+                case 1:
+                    
+                    break;
+                default:
+                    break;
+            }
+        }
     }
 
     private void on_go_clicked () {
+        bool res = Processing.merge (source1.encoder, source1.uri,
+                                     source2.encoder, source2.uri,
+                                     source.encoder, source.uri,
+                                     new Font (source1.font_button.get_font_desc (), source1.color),
+                                     new Font (source2.font_button.get_font_desc (), source2.color));
+        if (!res) {
+            //error
+        } else {
+            //ready
+        }
     }
 }
 

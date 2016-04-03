@@ -73,9 +73,24 @@ public class Processing {
         return merge (encoding[0], fname[0], encoding[1], fname[1], encoding[2], fname[2]);
     }
 
-    public static bool merge (string enc1, string fn1, string enc2, string fn2, string enc3, string fn) {
+    private static Font _f = new Font (Pango.FontDescription.from_string ("Normal bold 22"));
+    private static Font f1;
+    private static Font f2;
+
+    public static bool merge (string enc1, string fn1, string enc2, string fn2, string enc3, string fn,
+                              Font? top_font = null, Font? bot_font = null) {
         GLib.List<Title> timeline1, timeline2;
 
+        _top = true;
+        if (top_font == null)
+            f1 = _f;
+        else
+            f1 = top_font;
+        if (bot_font == null)
+            f2 = _f;
+        else
+            f2 = bot_font;
+        Debug.info ("merge f1", "%s %s %s %s %s".printf (f1.name, f1.bold, f1.italic, f1.size, f1.color));
         if (fn1 != "") {
             timeline1 = parse (enc1, fn1);
             _top = false;
@@ -254,7 +269,15 @@ public class Processing {
             }
         }
         foreach (string str in Text.ass_head) {
-            s = str;//convert_to (str, enc);
+            s = str;
+            if (s.has_prefix ("Style: Top,")) {
+                s = "Style: Top,%s,%s,&H00%s,&H00FFFFFF,&H80000000,&H80000000,%s,%s,0,0,100,100,0,0,1,3,0,8,10,10,10,0".printf (
+                    f1.name, f1.size, f1.color_ass, f1.bold, f1.italic);
+            } else if (s.has_prefix ("Style: Bot,")) {
+                s = "Style: Bot,%s,%s,&H00%s,&H00FFFFFF,&H80000000,&H80000000,%s,%s,0,0,100,100,0,0,1,3,0,2,10,10,10,0".printf (
+                    f2.name, f2.size, f2.color_ass, f2.bold, f2.italic);
+            }
+            s = convert_to (s, enc);
             if (fn.length == 0) {
                 stdout.printf ("%s\r\n", s);
             } else {
@@ -263,15 +286,15 @@ public class Processing {
         }
         foreach (Title t in timeline) {
             if (t.Top) {
-                s = "Dialogue: 0,%s.%02d,%s.%02d,Top,,0000,0000,0000,,%s".printf (t.Start.format ("%T"), 
-                                                                              t.Start.get_microsecond ()/10000, t.End.format ("%T"),
-                                                                              t.End.get_microsecond ()/10000, t.GetString()
-                                                                              );
+                s = "Dialogue: 0,%d:%02d:%02d.%02d,%d:%02d:%02d.%02d,Top,,0000,0000,0000,,%s".printf (
+                    t.Start.get_hour (), t.Start.get_minute (), t.Start.get_second (),
+                    t.Start.get_microsecond ()/10000, t.End.get_hour (), t.End.get_minute (), t.End.get_second (),
+                    t.End.get_microsecond ()/10000, t.GetString());
             } else {
-                s = "Dialogue: 0,%s.%02d,%s.%02d,Bot,,0000,0000,0000,,%s".printf (t.Start.format ("%T"), 
-                                                                              t.Start.get_microsecond ()/10000, t.End.format ("%T"),
-                                                                              t.End.get_microsecond ()/10000, t.GetString()
-                                                                              );
+                s = "Dialogue: 0,%d:%02d:%02d.%02d,%d:%02d:%02d.%02d,Bot,,0000,0000,0000,,%s".printf (
+                    t.Start.get_hour (), t.Start.get_minute (), t.Start.get_second (), 
+                    t.Start.get_microsecond ()/10000, t.End.get_hour (), t.End.get_minute (), t.End.get_second (),
+                    t.End.get_microsecond ()/10000, t.GetString());
             }
             s = convert_to (s, enc);
             if (fn.length == 0) {
@@ -312,6 +335,11 @@ public class Processing {
                 t2 = (Title) timeline.nth (i + 1).data;
                 if (t1.Top == t2.Top) {
                     t1.Number = index;
+                    if (t1.Top && (f1.color != "#FFFFFF")) {
+                        t1.AddColor (f1.color);
+                    } else if (t1.Bottom && (f2.color != "#FFFFFF")) {
+                        t1.AddColor (f2.color);
+                    }
                     srt_output (t1, enc, dos);
                 } else {
                     d = (int64) t2.Start.difference ( t1.Start);
@@ -333,28 +361,54 @@ public class Processing {
                         }
                         t.Number = index;
                         t.Start = minimum_time (t1, t2);
+                        if (f1.color != "#FFFFFF") {
+                            t.AddColor (f1.color);
+                        }
                         if (d2 < 500000) {
                             i++;
                         } else {
                             t.End = maximum_time (t1, t2);
                         }
+                        uint j = 1;
                         if (t1.Top) {
                             foreach (string s in t2.Text) {
-                                t.AddString (s);
+                                if (j==1) 
+                                    t.AddString ("<font color=\"" + f2.color + "\">" + s);
+                                else if (j == t2.Text.length ())
+                                    t.AddString (s + "</font>");
+                                else
+                                    t.AddString (s);
+                                j++;
                             }
                         } else {
                             foreach (string s in t1.Text) {
-                                t.AddString (s);
+                                if (j==1) 
+                                    t.AddString ("<font color=\"" + f2.color + "\">" + s);
+                                else if (j == t1.Text.length ())
+                                    t.AddString (s + "</font>");
+                                else
+                                    t.AddString (s);
+                                j++;
                             }
                         }
                         srt_output (t, enc, dos);
                     } else {
                         t1.Number = index;
+                        if (t1.Top && (f1.color != "#FFFFFF")) {
+                            t1.AddColor (f1.color);
+                        } else if (t1.Bottom && (f2.color != "#FFFFFF")) {
+                            t1.AddColor (f2.color);
+                        }
                         srt_output (t1, enc, dos);
                     }
                 }
             } else {
                 t1.Number = index;
+                if (t1.Top && (f1.color != "#FFFFFF")) {
+                    t1.AddColor (f1.color);
+                } else if (t1.Bottom && (f2.color != "#FFFFFF")) {
+                    t1.AddColor (f2.color);
+                }
                 srt_output (t1, enc, dos);
             }
             index++;
@@ -408,7 +462,7 @@ public class Processing {
     }
 
     public static bool exist (string filepath) {
-        GLib.File file = File.new_for_path (filepath);
+        GLib.File file = File.new_for_path (filepath.strip ());
         return file.query_exists ();
     }
 }

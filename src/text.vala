@@ -97,5 +97,8 @@ public const string[] encodings = {
 "WINDOWS-1257", "WINDOWS-1258"
 };
 
+public const string[] formats = {
+"ass", "srt"
+};
 }
 

@@ -19,6 +19,8 @@
 
 public class Debug : GLib.Object {
 
+    public static string last_error = "";
+
     public static void log (string source,
                             string? output)
     {
@@ -41,6 +43,7 @@ public class Debug : GLib.Object {
                                   string reporter,
                                   string? output)
     {
+        last_error = reporter + ": " + output;
         if (Srtmerge.debugging) {
             DateTime now = new DateTime.now_local();
             

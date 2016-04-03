@@ -33,6 +33,11 @@ public class Title : GLib.Object {
         _body.append (s);
     }
 
+    public void AddColor (string s) {
+        _body.first ().data = "<font color=\"" + s + "\">" + _body.first ().data;
+        _body.last ().data += "</font>";
+    }
+
     public string GetString () {
         string s = "";
         int i = 0;
@@ -46,12 +51,6 @@ public class Title : GLib.Object {
         }
         return s;
     }
-
-    /*public string? FontDescription {
-        get {return _body.FontDescription;}
-        set {_body.FontDescription = value;}
-        default = null;
-    }*/
 
     public uint Number {
         get;
@@ -89,4 +88,60 @@ public class Title : GLib.Object {
         set {Top = !value;}
     }
  }
+
+public class Font : GLib.Object {
+
+    public Font (Pango.FontDescription desc, string color_str = "#FFFFFF") {
+        color = color_str;
+        name = desc.get_family ();
+        if (desc.get_style () == Pango.Style.ITALIC)
+            italic = "-1";
+        else
+            italic = "0";
+        if (desc.get_weight () > Pango.Weight.NORMAL)
+            bold = "-1";
+        else
+            bold = "0";
+        size = "%.0f".printf (desc.get_size () / Pango.SCALE);
+        //Debug.info ("Font", size);
+    }
+
+    public string name {
+        get;
+        set;
+        default = "Sans";
+    }
+
+    public string bold {
+        get;
+        set;
+        default = "0";
+    }
+
+    public string italic {
+        get;
+        set;
+        default = "0";
+    }
+    public string size {
+        get;
+        set;
+        default = "22";
+    }
+
+    //private string _col = "#FFFFFF";
+    public string color {
+        get;
+        set;
+        default = "#FFFFFF";
+    }
+
+    private string _colass;
+    public string color_ass {
+        get {
+            _colass = color.substring (5,2) + color.substring (3,2) + color.substring (1,2);
+            return _colass;
+        }
+    }
+}
 
