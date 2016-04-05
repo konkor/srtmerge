@@ -77,10 +77,17 @@ public class Processing {
     private static SrtFont f1;
     private static SrtFont f2;
 
-    public static bool merge (string enc1, string fn1, string enc2, string fn2, string enc3, string fn,
-                              SrtFont? top_font = null, SrtFont? bot_font = null) {
+    public static bool merge (string enc1, string fn1,
+                              string enc2, string fn2,
+                              string enc, string fn,
+                              SrtFont? top_font = null, SrtFont? bot_font = null,
+                              bool is_gui = false) {
         GLib.List<Title> timeline1, timeline2;
 
+        if (is_gui && (fn.length == 0)) {
+            Debug.error ("Processing.merge", "Output file not selected.");
+            return false;
+        }
         _top = true;
         if (top_font == null)
             f1 = _f;
@@ -93,16 +100,24 @@ public class Processing {
         Debug.info ("merge f1", "%s %s %s %s %s".printf (f1.name, f1.bold, f1.italic, f1.size, f1.color));
         if (fn1 != "") {
             timeline1 = parse (enc1, fn1);
+            if (timeline1 == null) {
+                Debug.error ("Processing.merge", "Parsing error of " + fn1);
+                return false;
+            }
             _top = false;
         } else {
+            Debug.error ("Processing.merge", "Source file not selected.");
             return false;
         }
         if (fn2 != "") {
             timeline2 = parse (enc2, fn2);
+            if (timeline2 == null) {
+                Debug.error ("Processing.merge", "Parsing error of " + fn2);
+            }
         } else {
-            return export (timeline1, enc3, fn);
+            return export (timeline1, enc, fn);
         }
-        return export (join (timeline1, timeline2), enc3, fn);
+        return export (join (timeline1, timeline2), enc, fn);
     }
 
     public static List<Title>? parse (string enc, string fn) {
@@ -265,7 +280,7 @@ public class Processing {
             try {
                 dos = new DataOutputStream (file.create (FileCreateFlags.REPLACE_DESTINATION));
             } catch (Error e) {
-                Debug.error ("Parsing", e.message);
+                Debug.error ("export_ass", e.message);
             }
         }
         foreach (string str in Text.ass_head) {
@@ -285,6 +300,7 @@ public class Processing {
             }
         }
         foreach (Title t in timeline) {
+            t.clear ();
             if (t.Top) {
                 s = "Dialogue: 0,%d:%02d:%02d.%02d,%d:%02d:%02d.%02d,Top,,0000,0000,0000,,%s".printf (
                     t.Start.get_hour (), t.Start.get_minute (), t.Start.get_second (),
@@ -312,7 +328,6 @@ public class Processing {
         uint i = 0, n = timeline.length (), index = 1;
         TimeSpan d = 0, d1 = 0, d2 = 0;
         Title t1, t2, t3, t;
-        DateTime min, max;
 
         if (fn.length != 0) {
             file = File.new_for_path (fn);
@@ -320,13 +335,13 @@ public class Processing {
                 try {
                     file.delete ();
                 } catch (Error e) {
-                    Debug.error ("export_ass", e.message);
+                    Debug.error ("export_srt", e.message);
                 }
             }
             try {
                 dos = new DataOutputStream (file.create (FileCreateFlags.REPLACE_DESTINATION));
             } catch (Error e) {
-                Debug.error ("Parsing", e.message);
+                Debug.error ("export_srt", e.message);
             }
         }
         for (i = 0; i < n; i++) {
@@ -335,9 +350,14 @@ public class Processing {
                 t2 = (Title) timeline.nth (i + 1).data;
                 if (t1.Top == t2.Top) {
                     t1.Number = index;
-                    if (t1.Top && (f1.color != "#FFFFFF")) {
+                    if (t1.Top && f1.clear_style) {
+                        t1.clear ();
+                    } else if (t1.Bottom && f2.clear_style) {
+                        t1.clear ();
+                    }
+                    if (t1.Top && f1.enable_style) {
                         t1.AddColor (f1.color);
-                    } else if (t1.Bottom && (f2.color != "#FFFFFF")) {
+                    } else if (t1.Bottom && f2.enable_style) {
                         t1.AddColor (f2.color);
                     }
                     srt_output (t1, enc, dos);
@@ -361,7 +381,12 @@ public class Processing {
                         }
                         t.Number = index;
                         t.Start = minimum_time (t1, t2);
-                        if (f1.color != "#FFFFFF") {
+                        if (t.Top && f1.clear_style) {
+                            t.clear ();
+                        } else if (t.Bottom && f2.clear_style) {
+                            t.clear ();
+                        }
+                        if (f1.enable_style) {
                             t.AddColor (f1.color);
                         }
                         if (d2 < 500000) {
@@ -371,20 +396,30 @@ public class Processing {
                         }
                         uint j = 1;
                         if (t1.Top) {
+                            if (f2.clear_style) {
+                                t2.clear ();
+                            }
                             foreach (string s in t2.Text) {
-                                if (j==1) 
+                                if ((j == 1) && f2.enable_style && (j == t2.Text.length ()))
+                                    t.AddString ("<font color=\"" + f2.color + "\">" + s + "</font>");
+                                else if ((j == 1) && f2.enable_style)
                                     t.AddString ("<font color=\"" + f2.color + "\">" + s);
-                                else if (j == t2.Text.length ())
+                                else if ((j == t2.Text.length ()) && f2.enable_style)
                                     t.AddString (s + "</font>");
                                 else
                                     t.AddString (s);
                                 j++;
                             }
                         } else {
+                            if (f1.clear_style) {
+                                t1.clear ();
+                            }
                             foreach (string s in t1.Text) {
-                                if (j==1) 
+                                if ((j == 1) && f2.enable_style && (j == t1.Text.length ()))
+                                    t.AddString ("<font color=\"" + f2.color + "\">" + s + "</font>");
+                                else if ((j == 1) && f2.enable_style)
                                     t.AddString ("<font color=\"" + f2.color + "\">" + s);
-                                else if (j == t1.Text.length ())
+                                else if ((j == t1.Text.length ()) && f2.enable_style)
                                     t.AddString (s + "</font>");
                                 else
                                     t.AddString (s);
@@ -394,9 +429,14 @@ public class Processing {
                         srt_output (t, enc, dos);
                     } else {
                         t1.Number = index;
-                        if (t1.Top && (f1.color != "#FFFFFF")) {
+                        if (t1.Top && f1.clear_style) {
+                            t1.clear ();
+                        } else if (t1.Bottom && f2.clear_style) {
+                            t1.clear ();
+                        }
+                        if (t1.Top && f1.enable_style) {
                             t1.AddColor (f1.color);
-                        } else if (t1.Bottom && (f2.color != "#FFFFFF")) {
+                        } else if (t1.Bottom && f2.enable_style) {
                             t1.AddColor (f2.color);
                         }
                         srt_output (t1, enc, dos);
@@ -404,9 +444,14 @@ public class Processing {
                 }
             } else {
                 t1.Number = index;
-                if (t1.Top && (f1.color != "#FFFFFF")) {
+                if (t1.Top && f1.clear_style) {
+                    t1.clear ();
+                } else if (t1.Bottom && f2.clear_style) {
+                    t1.clear ();
+                }
+                if (t1.Top && f1.enable_style) {
                     t1.AddColor (f1.color);
-                } else if (t1.Bottom && (f2.color != "#FFFFFF")) {
+                } else if (t1.Bottom && f2.enable_style) {
                     t1.AddColor (f2.color);
                 }
                 srt_output (t1, enc, dos);

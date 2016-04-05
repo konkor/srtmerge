@@ -26,8 +26,8 @@ public class SrtmergeWindow : Gtk.Window {
     }
 
     private Gtk.Box vbox1;
-    public Gtk.InfoBar infoBar;
-	private Gtk.Box hboxInfo;
+    private Gtk.InfoBar infoBar;
+	private Gtk.Box infoBox;
     private Gtk.HeaderBar hb;
     private Gtk.Button button_add;
     private Gtk.Button button_go;
@@ -51,7 +51,7 @@ public class SrtmergeWindow : Gtk.Window {
         button_add.tooltip_text = "Add source files";
         Gtk.Image image_add = new Gtk.Image.from_stock (Gtk.Stock.ADD, Gtk.IconSize.BUTTON);
         button_add.add (image_add);
-        hb.pack_start (button_add);
+        //hb.pack_start (button_add);
 
         button_go = new Gtk.Button ();
         button_go.can_focus = true;
@@ -64,8 +64,8 @@ public class SrtmergeWindow : Gtk.Window {
         vbox1 = new Gtk.Box (Gtk.Orientation.VERTICAL, 6);
         add (vbox1);
 
-        hboxInfo = new Gtk.Box (Gtk.Orientation.HORIZONTAL, 6);
-		vbox1.pack_start (hboxInfo,false,true,0);
+        infoBox = new Gtk.Box (Gtk.Orientation.HORIZONTAL, 6);
+		vbox1.pack_start (infoBox,false,true,0);
 
         source1 = new FileSource ("Top subtitle source", this);
         vbox1.pack_start (source1, false, false, 6);
@@ -74,11 +74,12 @@ public class SrtmergeWindow : Gtk.Window {
         vbox1.add (source2);
 
         vbox1.add (new Gtk.Separator (Gtk.Orientation.HORIZONTAL));
+        vbox1.add (new Gtk.Separator (Gtk.Orientation.HORIZONTAL));
 
         source = new FileSource ("Output subtitle source", this, false);
         vbox1.add (source);
 
-		set_default_size (560, 480);
+		set_default_size (550, 480);
         show ();
     }
 
@@ -104,13 +105,69 @@ public class SrtmergeWindow : Gtk.Window {
         bool res = Processing.merge (source1.encoder, source1.uri,
                                      source2.encoder, source2.uri,
                                      source.encoder, source.uri,
-                                     new SrtFont (source1.font_button.get_font_desc (), source1.color),
-                                     new SrtFont (source2.font_button.get_font_desc (), source2.color));
+                                     source1.font, source2.font,
+                                     true);
         if (!res) {
-            //error
+            show_error (Debug.last_error);
         } else {
-            //ready
+            show_info ("Subtitle has saved to :\n" + source.uri);
         }
     }
+
+    public int show_message (string text, MessageType type = MessageType.INFO) {
+        if (infoBar != null) infoBar.destroy ();
+        if (type == Gtk.MessageType.QUESTION) {
+            infoBar = new InfoBar.with_buttons (Gtk.Stock.YES, Gtk.ResponseType.YES,
+                                                Gtk.Stock.CANCEL, Gtk.ResponseType.CANCEL);
+        } else {
+            infoBar = new InfoBar.with_buttons ("gtk-close", Gtk.ResponseType.CLOSE);
+            infoBar.set_default_response (Gtk.ResponseType.OK);
+        }
+        infoBar.set_message_type (type);
+        Gtk.Container content = infoBar.get_content_area ();
+        switch (type) {
+            case Gtk.MessageType.QUESTION:
+                content.add (new Gtk.Image.from_stock ("gtk-dialog-question", Gtk.IconSize.DIALOG));
+                break;
+            case Gtk.MessageType.INFO:
+                content.add (new Gtk.Image.from_stock ("gtk-dialog-info", Gtk.IconSize.DIALOG));
+                break;
+            case Gtk.MessageType.ERROR:
+                content.add (new Gtk.Image.from_stock ("gtk-dialog-error", Gtk.IconSize.DIALOG));
+                break;
+            case Gtk.MessageType.WARNING:
+                content.add (new Gtk.Image.from_stock ("gtk-dialog-warning", Gtk.IconSize.DIALOG));
+                break;
+        }
+        content.add (new Gtk.Label (text));
+        infoBar.show_all ();
+        infoBox.add (infoBar);
+        infoBar.response.connect (() => {
+			infoBar.destroy ();
+			//hide();
+		});
+        GLib.Timeout.add (5000, on_info_timeout);
+        return -1;
+    }
+
+    private bool on_info_timeout () {
+        Debug.log ("on_info_timeout","on_info_timeout");
+        if (infoBar != null)
+            infoBar.destroy ();
+        return false;
+    }
+
+    public int show_warning (string text = "") {
+        return show_message (text, MessageType.WARNING);
+    }
+
+    public int show_info (string text = "") {
+        return show_message (text, MessageType.INFO);
+    }
+
+    public int show_error (string text = "") {
+        return show_message (text, MessageType.ERROR);
+    }
+
 }
 

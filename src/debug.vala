@@ -36,15 +36,15 @@ public class Debug : GLib.Object {
     public static void error (string source,
                             string? output)
     {
+        last_error = source + ":\n" + output;
         print_msg (domain.ERROR, source, output);
     }
 
     public static void print_msg (domain _domain,
-                                  string reporter,
+                                  string source,
                                   string? output)
     {
-        last_error = reporter + ": " + output;
-        if (Srtmerge.debugging) {
+        if (Srtmerge.debugging || (_domain == domain.ERROR)) {
             DateTime now = new DateTime.now_local();
             
             stdout.printf ("\x1b[%sm[%02d:%02d:%02d.%06d %s] [%s]\x1b[0m %s\n", // http://ascii-table.com/ansi-escape-sequences.php
@@ -54,7 +54,7 @@ public class Debug : GLib.Object {
                            now.get_second(),
                            now.get_microsecond(),
                            domain_name (_domain).up(),
-                           reporter,
+                           source,
                            output);
         }
     }

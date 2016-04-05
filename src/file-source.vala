@@ -21,6 +21,7 @@ using Gtk;
 
 public class FileSource : Gtk.Bin {
     private Gtk.Box vbox1;
+    private Gtk.Box hbox_title;
     private Gtk.Label label_title;
     private Gtk.Box hbox_path;
     private Gtk.Entry entry_path;
@@ -30,6 +31,8 @@ public class FileSource : Gtk.Bin {
     public Gtk.FontButton font_button;
     private Gtk.ColorButton color_button;
     private Gtk.ComboBoxText combo_format;
+    private Gtk.ToggleButton clear_style_btn;
+    private Gtk.ToggleButton enable_style_btn;
     
     private SrtmergeWindow w;
     private bool input_source;
@@ -41,16 +44,19 @@ public class FileSource : Gtk.Bin {
         vbox1 = new Gtk.Box (Gtk.Orientation.VERTICAL, 6);
         add (vbox1);
 
-        label_title = new Gtk.Label (title);
-        label_title.set_alignment(0, 0);
-        label_title.override_font (Pango.FontDescription.from_string ("Normal bold"));
-        vbox1.pack_start (label_title, false, false, 6);
+        hbox_title = new Gtk.Box (Gtk.Orientation.HORIZONTAL, 6);
+        vbox1.add (hbox_title);
 
-        hbox_path = new Gtk.Box (Gtk.Orientation.HORIZONTAL, 6);
+        label_title = new Gtk.Label (title);
+        label_title.set_alignment (0, 0.5F);
+        label_title.override_font (Pango.FontDescription.from_string ("Normal bold"));
+        hbox_title.pack_start (label_title, false, false, 6);
+
+        hbox_path = new Gtk.Box (Gtk.Orientation.HORIZONTAL, 0);
         vbox1.add (hbox_path);
 
         entry_path = new Gtk.Entry ();
-        hbox_path.pack_start (entry_path, true, true, 0);
+        hbox_path.pack_start (entry_path, true, true, 6);
 
         button_path = new Gtk.Button ();
         button_path.can_focus = true;
@@ -64,7 +70,6 @@ public class FileSource : Gtk.Bin {
         vbox1.add (hbox_tools);
 
         Gtk.Label label = new Gtk.Label ("Encoding");
-        hbox_tools.add (label);
         
         combo_encode = new Gtk.ComboBoxText.with_entry ();
         combo_encode.append_text ("");
@@ -73,7 +78,8 @@ public class FileSource : Gtk.Bin {
         }
         Entry entry = (Entry)combo_encode.get_child();
         entry.text = "UTF-8";
-        hbox_tools.add (combo_encode);
+        hbox_title.pack_end (combo_encode, false, false, 0);
+        hbox_title.pack_end (label, false, false, 0);
 
         if (input_source) {
             label = new Gtk.Label ("Font");
@@ -82,17 +88,29 @@ public class FileSource : Gtk.Bin {
             font_button = new Gtk.FontButton ();
             hbox_tools.add (font_button);
             Pango.FontDescription font = font_button.get_font_desc ();
-            font.set_size (22*Pango.SCALE);
+            font.set_size (22 * Pango.SCALE);
+            font.set_weight (Pango.Weight.BOLD);
             font_button.set_font_desc (font);
 
             color_button = new Gtk.ColorButton ();
             hbox_tools.add (color_button);
-
             Gdk.RGBA rgb = Gdk.RGBA ();
 		    //bool tmp = rgb.parse ("#FFFFFF");
 		    //assert (tmp == true);
             rgb.parse (_color);
 		    color_button.rgba = rgb;
+
+            clear_style_btn = new Gtk.ToggleButton ();
+            clear_style_btn.tooltip_text = "Clear old style in the source";
+            clear_style_btn.set_active (true);
+            Gtk.Image image = new Gtk.Image.from_stock ("gtk-clear", Gtk.IconSize.BUTTON);
+            clear_style_btn.add (image);
+            hbox_tools.pack_end (clear_style_btn, false, false, 0);
+
+            enable_style_btn = new Gtk.ToggleButton.with_label ("Enable styling");
+            enable_style_btn.tooltip_text = "Enable styling in the source";
+            enable_style_btn.set_active (true);
+            hbox_tools.pack_end (enable_style_btn, false, false, 0);
         } else {
             label = new Gtk.Label ("Format");
             hbox_tools.add (label);
@@ -105,8 +123,9 @@ public class FileSource : Gtk.Bin {
             hbox_tools.add (combo_format);
 
             combo_format.changed.connect (() => {
+                string s = combo_format.get_active_text ();
+                //clear_style.sensitive = s == "SRT";
                 if (entry_path.text.strip ().length == 0) return;
-	    		string s = combo_format.get_active_text ();
                 if (entry_path.text.up ().has_suffix (".ASS")) {
                     if (s == "SRT") {
                         entry_path.text = entry_path.text.substring (0, entry_path.text.up ().index_of (".ASS")) + ".srt";
@@ -175,5 +194,16 @@ public class FileSource : Gtk.Bin {
             return _color;
         }
     }
+
+    private SrtFont _font;
+    public SrtFont font {
+        get {
+            _font = new SrtFont (font_button.get_font_desc (), color);
+            _font.clear_style = clear_style_btn.active;
+            _font.enable_style = enable_style_btn.active;
+            return _font;
+        }
+    }
+
 }
 

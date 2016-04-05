@@ -87,6 +87,28 @@ public class Title : GLib.Object {
         get {return !Top;}
         set {Top = !value;}
     }
+
+    public void clear () {
+        int i, j;
+        uint ind, n = _body.length();
+        string s;
+        for (ind = 0; ind < n; ind++) {
+            s = _body.nth (ind).data;
+            if (s.index_of ("</font>") > -1) {
+                _body.nth (ind).data = s.replace ("</font>", "");
+                s = _body.nth (ind).data;
+            }
+            i = s.index_of ("<font color=");
+            if (i > -1) {
+                j = s.index_of (">", i);
+                if (j > -1) {
+                    //Debug.log ("title 0", s);
+                    _body.nth (ind).data = s.substring (0, i) + s.substring (j + 1);
+                    //Debug.log ("title 1", s);
+                }
+            }
+        }
+    }
  }
 
 

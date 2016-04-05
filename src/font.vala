@@ -71,5 +71,17 @@ public class SrtFont {
             return _colass;
         }
     }
+
+    public bool clear_style {
+        get;
+        set;
+        default = true;
+    }
+
+    private bool _enable_style = true;
+    public bool enable_style {
+        get { return _enable_style && (color != "#FFFFFF");}
+        set { _enable_style = value;}
+    }
 }
 
