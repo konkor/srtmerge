@@ -1,0 +1,12 @@
+Source: srtmerge
+Maintainer: Kostiantyn Korienkov <kkorienkov@gmail.com>
+Section: misc
+Priority: optional
+Standards-Version: 3.9.2
+Build-Depends: debhelper (>= 9)
+
+Package: srtmerge
+Architecture: any
+Depends: ${shlibs:Depends}, ${misc:Depends}
+Description: merge 2 subtitles into srt or ass format
+ srtmerge is CLI/GUI tool to merge srt subtitles into one subtitle file with styling and encoding supports in two different formats (srt/ass).

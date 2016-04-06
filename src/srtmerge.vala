@@ -40,10 +40,9 @@ public class Srtmerge : Object
 
     static int main (string[] args) {
 
-        bool processed = false;
         int32 i = 0;
         
-        debugging = true;
+        debugging = false;
         
         foreach (string s in args) {
             if ((s == "-h") || (s == "--help"))
