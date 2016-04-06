@@ -1,4 +1,6 @@
 *~
+*.srt
+*.ass
 *.stamp
 src/*.c
 autom4te.cache/
