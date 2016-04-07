@@ -1,0 +1,13 @@
+[Desktop Entry]
+Version=1.0
+Name=Subrip merger
+GenericName=Subtitle Merger
+Comment=Convert two srt subtitles in a single file
+TryExec=srtmerge
+Exec=srtmerge %f
+Icon=srtmerge
+Terminal=false
+Type=Application
+StartupNotify=true
+Categories=GNOME;GTK;Utility;AudioVideoEditing;
+MimeType=application/x-subrip;
