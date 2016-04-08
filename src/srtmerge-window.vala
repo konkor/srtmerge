@@ -88,7 +88,8 @@ public class SrtmergeWindow : Gtk.Window {
         button_go.clicked.connect (on_go_clicked);
 
         if (gui) {
-            if (Processing.names[0].length != 0) source1.uri = Processing.names[0];
+            if (Processing.names == null) return;
+            if (Processing.names[0] != "") source1.uri = Processing.names[0];
             if (Processing.names[1].length != 0) source2.uri = Processing.names[1];
             if (Processing.names[2].length != 0) source.uri = Processing.names[2];
             if (Processing.codes[0].length != 0) source1.encoder = Processing.codes[0];
