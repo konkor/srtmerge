@@ -8,5 +8,5 @@ Build-Depends: debhelper (>= 9)
 Package: srtmerge
 Architecture: any
 Depends: ${shlibs:Depends}, ${misc:Depends}
-Description: merge 2 subtitles into srt or ass format
- srtmerge is CLI/GUI tool to merge srt subtitles into one subtitle file with styling and encoding supports in two different formats (srt/ass).
+Description: merge 2 subtitles into SubRip SRT or Sub Station Alpha ASS formats
+ SubRip Merge joins two SubRip subtitles into single subtitle with styling and encoding supports in two different formats SubRip SRT or Sub Station Alpha (SubStation Alpha) ASS.

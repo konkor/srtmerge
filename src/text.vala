@@ -47,14 +47,14 @@ Copyright © 2016–2016 Kostiantyn Korienkov <kkorienkov@gmail.com>";
             
     public const  string app_help                  =
 @"Usage:
-  srtmerge [options] [[-e ENCODING ]input1.srt] [[-e ENCODING ]input2.srt] [[-o] [-e ECODING] FILENAME]
+  srtmerge [options] [[-e PAGE ]input1.srt] [[-e PAGE ]input2.srt] [[-o] [-e PAGE] FILENAME]
 
 Options:
   -h, --help       Show this help and exit
   -v, --version    Show version number and exit
   --license        Show license and exit
   --debug          Print debug messages
-  -e ENCODING      Select encoding page for input file
+  -e PAGE      Select encoding page for input file
                    (default encoding is UTF-8)
   -o FILENAME      Merged filename to output
   --gui            Start GUI
@@ -67,13 +67,13 @@ Examples:
   * Convert sintel_en.srt to ass format and put output to console: 
   srtmerge sintel_en.srt
 
-  * Convert sintel_ua.srt encoded as WINDOWS-1251 to srt format
+  * Convert sintel_ua.srt encoded as KOI8U to srt format
   with UTF-8 (default) encoding:
-  srtmerge -e CP-1251 sintel_ua.srt -o sintel_ua.srt
+  srtmerge -e KOI8U sintel_ua.srt -o sintel_ua.srt
 
-  * Merge sintel_ua.srt encoded as WINDOWS-1251 and sintel_en.srt to
+  * Merge sintel_ua.srt encoded as KOI8U and sintel_en.srt to
   ass format and create sintel_merged.ass file with UTF-8 encoding:
-  srtmerge -e CP-1251 sintel_ua.srt sintel_en.srt sintel_merged.ass
+  srtmerge -e KOI8U sintel_ua.srt sintel_en.srt sintel_merged.ass
 
 " + app_info + "\n";
 

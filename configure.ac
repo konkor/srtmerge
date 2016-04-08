@@ -23,5 +23,6 @@ Makefile
 src/Makefile
 data/icons/Makefile
 data/Makefile
+man/Makefile
 
 ])

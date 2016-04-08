@@ -1,0 +1,53 @@
+.TH SRTMERGE 1
+.SH NAME
+srtmerge \- merge 2 subtitles into SubRip SRT or Sub Station Alpha ASS formats
+.SH SYNOPSIS
+.B srtmerge
+.RI [\fBoptions\fR]
+[[\fB\-e\fR \fIPAGE\fR] INPUT1.SRT]
+[[\fB\-e\fR \fIPAGE\fR] INPUT2.SRT]
+[[\fB\-[o|e]\fR \fIPAGE\fR] FILENAME]
+.SH DESCRIPTION
+.B srtmerge
+joins two SubRip subtitles into single subtitle with styling and
+encoding supports in two different formats SubRip SRT or 
+Sub Station Alpha (SubStation Alpha) ASS.
+.SH OPTIONS
+.TP
+.BR \-\-help
+Show the help and exit.
+.TP
+.BR \-\-version
+Show version number and exit.
+.TP
+.BR \-\-license
+Show license and exit.
+.TP
+.BR \-\-debug
+Print debug messages.
+.TP
+.BR \-\-gui
+Starts with GUI.
+.TP
+.BR \-e " " \fIPAGE\fR " " \fIFILENAME\fR
+Set the encoding \fIPAGE\fR to the source file.
+Default encoding page is 'UTF\-8'.
+.TP
+.BR \-o " " \fIFILENAME\fR
+Set the \fIFILENAME\fR to the output subtitle.
+\fIFILENAME\fR can be with SRT (SubRip) or ASS (SubStation Alpha) extension.
+Default extension to the output is ASS format.
+.SH USAGE
+.TP
+* Merge sintel_ua.srt and sintel_en.srt to ass format and create sintel_merged.ass file with default UTF\-8 encoding:
+srtmerge sintel_ua.srt sintel_en.srt sintel_merged.ass
+.TP
+* Convert sintel_en.srt to ass format and put output to console: 
+srtmerge sintel_en.srt
+.TP
+* Convert sintel_ua.srt encoded as KOI8U to srt format with UTF\-8 (default) encoding:
+srtmerge \-e KOI8U sintel_ua.srt \-o sintel_ua.srt
+.TP
+* Merge sintel_ua.srt encoded as KOI8U and sintel_en.srt to ass format and create sintel_merged.ass file with UTF\-8 encoding:
+srtmerge \-e KOI8U sintel_ua.srt sintel_en.srt sintel_merged.ass
+
