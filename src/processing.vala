@@ -20,7 +20,10 @@
 public class Processing {
     private static bool _top = true;
 
-    public static bool Args (string[] args) {
+    public static string[] names;
+    public static string[] codes;
+
+    public static bool Args (string[] args, bool gui = false) {
         int i, pos = 0, count = args.length;
         string[] fname = {"", "", ""};
         string[] encoding = {"", "", ""};
@@ -28,7 +31,7 @@ public class Processing {
         for (i = 1; i < count; i++) {
             Debug.log ("args[%d]".printf (i), args[i]);
             if (pos > 2) break;
-            if ((args[i] == "-e") || (args[i] == "-o")) {
+            if ((args[i] == "-e") || (args[i] == "-o") || (args[i] == "--gui") || (args[i] == "--debug")) {
                 switch (args[i]) {
                     case "-e":
                         if (i + 2 < count) {
@@ -48,18 +51,18 @@ public class Processing {
                         break;
                     case "-o":
                         if (i + 2 < count) {
-                            encoding[2] = args[i + 1];
-                            fname[2] = args[i + 2];
+                            encoding[2] = (args[i + 1]);
+                            fname[2] = (args[i + 2]);
                             i += 2;
                         } else {
-                            fname[2] = args[i + 1];
+                            fname[2] = (args[i + 1]);
                             i += 1;
                         }
                         break;
                 }
             } else {
                 if (exist (args[i])) {
-                    fname[pos] = args[i];
+                    fname[pos] = (args[i]);
                     //Debug.log ("fname[%d]".printf(pos), fname[pos]);
                     pos++;
                 } else {
@@ -70,7 +73,15 @@ public class Processing {
         }
         if ( pos == 0) return false;
 
-        return merge (encoding[0], fname[0], encoding[1], fname[1], encoding[2], fname[2]);
+        if (gui) {
+            names = fname;
+            codes = encoding;
+            return false;
+        } else {
+            return merge (encoding[0], fname[0],
+                          encoding[1], fname[1],
+                          encoding[2], fname[2]);
+        }
     }
 
     private static SrtFont _f = new SrtFont (Pango.FontDescription.from_string ("Normal bold 22"));

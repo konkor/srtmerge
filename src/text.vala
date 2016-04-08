@@ -19,16 +19,16 @@
 
 public class Text : GLib.Object {
 
-    public const  string app_name                  = "Srt Merger";
-    public const  string app_subtitle              = "srtmerge is the tool for 'srt' merging/converting into one single 'ass/srt' file";
-    public const  string app_version               = "0.1.0";
+    public const  string app_name                  = "Subrip Merge";
+    public const  string app_subtitle              = "It's the tool for 'srt' merging/converting into one single 'ass/srt' file";
+    public const  string app_version               = "1.0";
     public const  string app_website               = "https://www.google.com/";
     public const  string app_website_label         = "www.google.com";
     public static string app_comments;
     public static string app_description;
-    public const  string app_copyright             = "Copyright © 2016–2016 Stephen Brandt";
+    public const  string app_copyright             = "Copyright © 2016 Kostiantyn Korienkov";
     public const  string app_license               =
-@"Srt Merger is free software: you can redistribute it and/or modify it
+@"Subrip Merger is free software: you can redistribute it and/or modify it
 under the terms of the GNU General Public License as published by the
 Free Software Foundation, either version 3 of the License, or
 (at your option) any later version.
@@ -47,18 +47,33 @@ Copyright © 2016–2016 Kostiantyn Korienkov <kkorienkov@gmail.com>";
             
     public const  string app_help                  =
 @"Usage:
-  srtmerge [options] [[-e ENCODING ]input1.srt] [[-e ENCODING ]input2.srt] [-o FILENAME]
+  srtmerge [options] [[-e ENCODING ]input1.srt] [[-e ENCODING ]input2.srt] [[-o] [-e ECODING] FILENAME]
 
 Options:
-  -h, --help              Show this help and exit
-  -v, --version           Show version number and exit
-  --license               Show license and exit
-  -d, --debug             Print debug messages
-  -e ENCODING             Select encoding page for input file
-  -o FILENAME             Merged filename to output
+  -h, --help       Show this help and exit
+  -v, --version    Show version number and exit
+  --license        Show license and exit
+  --debug          Print debug messages
+  -e ENCODING      Select encoding page for input file
+                   (default encoding is UTF-8)
+  -o FILENAME      Merged filename to output
+  --gui            Start GUI
 
-  Examples:
-    srtmerge -e CP-1251 s01e07_ua.srt s01e07_en.srt -o s01e07_merged.ass
+Examples:
+  * Merge sintel_ua.srt and sintel_en.srt to ass format and
+  create sintel_merged.ass file with default UTF-8 encoding:
+  srtmerge sintel_ua.srt sintel_en.srt sintel_merged.ass
+
+  * Convert sintel_en.srt to ass format and put output to console: 
+  srtmerge sintel_en.srt
+
+  * Convert sintel_ua.srt encoded as WINDOWS-1251 to srt format
+  with UTF-8 (default) encoding:
+  srtmerge -e CP-1251 sintel_ua.srt -o sintel_ua.srt
+
+  * Merge sintel_ua.srt encoded as WINDOWS-1251 and sintel_en.srt to
+  ass format and create sintel_merged.ass file with UTF-8 encoding:
+  srtmerge -e CP-1251 sintel_ua.srt sintel_en.srt sintel_merged.ass
 
 " + app_info + "\n";
 

@@ -25,12 +25,12 @@ public class Srtmerge : Object
     
     public static bool debugging;
 
-    public Srtmerge ()
+    public Srtmerge (bool gui)
     {
-        window = new SrtmergeWindow();
-        
-        window.show_all();
-        window.destroy.connect(on_destroy);
+        window = new SrtmergeWindow (gui);
+
+        window.show_all ();
+        window.destroy.connect (on_destroy);
     }
 
     public void on_destroy (Widget window) 
@@ -41,10 +41,15 @@ public class Srtmerge : Object
     static int main (string[] args) {
 
         int32 i = 0;
-        
+        bool gui = false;
         debugging = false;
         
         foreach (string s in args) {
+            if (s == "--gui")
+            {
+                gui = true;
+                break;
+            }
             if ((s == "-h") || (s == "--help"))
             {
                 stdout.printf ("%s\n", Text.app_help);
@@ -60,7 +65,7 @@ public class Srtmerge : Object
                 stdout.printf ("%s\n", "\n" + Text.app_info + "\n\n" + Text.app_license + "\n");
                 return 0;
             }
-            else if ((s == "-d") || (s == "--debug"))
+            else if (s == "--debug")
             {
                 debugging = true;
             }
@@ -77,12 +82,13 @@ public class Srtmerge : Object
             //Debug.log ("args" + i.to_string(), s);
             i++;
         }
-        if (Processing.Args (args))
+
+        if (Processing.Args (args, gui))
             return 0;
 
         //Starting GUI
         Gtk.init (ref args);
-        var app = new Srtmerge ();
+        var app = new Srtmerge (gui);
 
         Gtk.main ();
 		

@@ -22,6 +22,8 @@ srtmerge_SOURCES = \
 srtmerge_VALAFLAGS =  \
 	--pkg gtk+-3.0
 
+#	-g  --save-temps
+
 
 srtmerge_LDFLAGS = \
 	-Wl,--export-dynamic

@@ -174,8 +174,9 @@ public class FileSource : Gtk.Bin {
                 return _encoder;
         }
         set {
-            //var entry = (Entry)combo_encode.get_child();
-            //entry.text = value;
+            _encoder = value;
+            var entry = (Entry)combo_encode.get_child();
+            entry.text = _encoder;
         }
     }
 

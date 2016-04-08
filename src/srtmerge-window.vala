@@ -20,9 +20,9 @@ using Gtk;
 
 public class SrtmergeWindow : Gtk.Window {
 
-    public SrtmergeWindow () {
+    public SrtmergeWindow (bool gui) {
         build ();
-        initialize ();
+        initialize (gui);
     }
 
     private Gtk.Box vbox1;
@@ -83,9 +83,18 @@ public class SrtmergeWindow : Gtk.Window {
         show ();
     }
 
-    private void initialize () {
+    private void initialize (bool gui) {
         button_add.clicked.connect (on_add_clicked);
         button_go.clicked.connect (on_go_clicked);
+
+        if (gui) {
+            if (Processing.names[0].length != 0) source1.uri = Processing.names[0];
+            if (Processing.names[1].length != 0) source2.uri = Processing.names[1];
+            if (Processing.names[2].length != 0) source.uri = Processing.names[2];
+            if (Processing.codes[0].length != 0) source1.encoder = Processing.codes[0];
+            if (Processing.codes[1].length != 0) source2.encoder = Processing.codes[1];
+            if (Processing.codes[2].length != 0) source.encoder = Processing.codes[2];
+        }
 	}
 
     private void on_add_clicked () {
