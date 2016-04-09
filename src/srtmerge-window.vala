@@ -44,21 +44,14 @@ public class SrtmergeWindow : Gtk.Window {
         hb.subtitle = Text.app_subtitle;
         set_titlebar (hb);
 
-        button_add = new Gtk.Button ();
-        button_add.can_default = true;
-		button_add.can_focus = true;
-		button_add.use_underline = true;
-        button_add.tooltip_text = "Add source files";
-        Gtk.Image image_add = new Gtk.Image.from_stock (Gtk.Stock.ADD, Gtk.IconSize.BUTTON);
-        button_add.add (image_add);
-        //hb.pack_start (button_add);
-
-        button_go = new Gtk.Button ();
-        button_go.can_focus = true;
-		button_go.use_underline = true;
+        button_go = new Gtk.Button ( );
+        button_go.use_underline = true;
+        button_go.can_default = true;
+        this.set_default (button_go);
+        button_go.label = "Merge";
         button_go.tooltip_text = "Merge/Convert subtitles";
-        image_add = new Gtk.Image.from_stock (Gtk.Stock.EXECUTE, Gtk.IconSize.BUTTON);
-        button_go.add (image_add);
+        //image_add = new Gtk.Image.from_stock (Gtk.Stock.EXECUTE, Gtk.IconSize.BUTTON);
+        //button_go.add (image_add);
         hb.pack_end (button_go);
         
         vbox1 = new Gtk.Box (Gtk.Orientation.VERTICAL, 6);

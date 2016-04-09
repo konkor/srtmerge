@@ -19,7 +19,7 @@
 
 public class Text : GLib.Object {
 
-    public const  string app_name                  = "Subrip Merge";
+    public const  string app_name                  = "SubRip Merge";
     public const  string app_subtitle              = "It's the tool for 'srt' merging/converting into one single 'ass/srt' file";
     public const  string app_version               = "1.0";
     public const  string app_website               = "https://www.google.com/";
@@ -28,7 +28,7 @@ public class Text : GLib.Object {
     public static string app_description;
     public const  string app_copyright             = "Copyright © 2016 Kostiantyn Korienkov";
     public const  string app_license               =
-@"Subrip Merger is free software: you can redistribute it and/or modify it
+@"SubRip Merger is free software: you can redistribute it and/or modify it
 under the terms of the GNU General Public License as published by the
 Free Software Foundation, either version 3 of the License, or
 (at your option) any later version.

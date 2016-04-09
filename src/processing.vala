@@ -297,11 +297,17 @@ public class Processing {
         foreach (string str in Text.ass_head) {
             s = str;
             if (s.has_prefix ("Style: Top,")) {
-                s = "Style: Top,%s,%s,&H00%s,&H00FFFFFF,&H80000000,&H80000000,%s,%s,0,0,100,100,0,0,1,3,0,8,10,10,10,0".printf (
-                    f1.name, f1.size, f1.color_ass, f1.bold, f1.italic);
+                if (f1.enable_style)
+                    s = "Style: Top,%s,%s,&H00%s,&H00FFFFFF,&H80000000,&H80000000,%s,%s,0,0,100,100,0,0,1,3,0,8,10,10,10,0".printf (
+                        f1.name, f1.size, f1.color_ass, f1.bold, f1.italic);
+                else
+                    s = "Style: Top,Normal,22,&H00FFFFFF,&H00FFFFFF,&H80000000,&H80000000,0,0,0,0,100,100,0,0,1,3,0,8,10,10,10,0";
             } else if (s.has_prefix ("Style: Bot,")) {
-                s = "Style: Bot,%s,%s,&H00%s,&H00FFFFFF,&H80000000,&H80000000,%s,%s,0,0,100,100,0,0,1,3,0,2,10,10,10,0".printf (
-                    f2.name, f2.size, f2.color_ass, f2.bold, f2.italic);
+                if (f2.enable_style)
+                    s = "Style: Bot,%s,%s,&H00%s,&H00FFFFFF,&H80000000,&H80000000,%s,%s,0,0,100,100,0,0,1,3,0,2,10,10,10,0".printf (
+                        f2.name, f2.size, f2.color_ass, f2.bold, f2.italic);
+                else
+                    s = "Style: Bot,Normal,22,&H00FFFFFF,&H00FFFFFF,&H80000000,&H80000000,0,0,0,0,100,100,0,0,1,3,0,8,10,10,10,0";
             }
             s = convert_to (s, enc);
             if (fn.length == 0) {
@@ -367,9 +373,9 @@ public class Processing {
                         t1.clear ();
                     }
                     if (t1.Top && f1.enable_style) {
-                        t1.AddColor (f1.color);
+                        t1.AddColor (f1);
                     } else if (t1.Bottom && f2.enable_style) {
-                        t1.AddColor (f2.color);
+                        t1.AddColor (f2);
                     }
                     srt_output (t1, enc, dos);
                 } else {
@@ -398,7 +404,7 @@ public class Processing {
                             t.clear ();
                         }
                         if (f1.enable_style) {
-                            t.AddColor (f1.color);
+                            t.AddColor (f1);
                         }
                         if (d2 < 500000) {
                             i++;
@@ -411,12 +417,35 @@ public class Processing {
                                 t2.clear ();
                             }
                             foreach (string s in t2.Text) {
-                                if ((j == 1) && f2.enable_style && (j == t2.Text.length ()))
-                                    t.AddString ("<font color=\"" + f2.color + "\">" + s + "</font>");
-                                else if ((j == 1) && f2.enable_style)
-                                    t.AddString ("<font color=\"" + f2.color + "\">" + s);
-                                else if ((j == t2.Text.length ()) && f2.enable_style)
+                                if ((j == 1) && f2.enable_style && (j == t2.Text.length ())) {
+                                    if (f2.bold == "-1") {
+                                        s = "<b>" + s;
+                                        s += "</b>";
+                                    }
+                                    if (f2.italic == "-1") {
+                                        s = "<i>" + s;
+                                        s += "</i>";
+                                    }
+                                    t.AddString ("<font color=\"" + f2.color + "\" face=\"" + f2.name + "\">" + s + "</font>");
+                                }
+                                else if ((j == 1) && f2.enable_style) {
+                                    if (f2.bold == "-1") {
+                                        s = "<b>" + s;
+                                    }
+                                    if (f2.italic == "-1") {
+                                        s = "<i>" + s;
+                                    }
+                                    t.AddString ("<font color=\"" + f2.color + "\" face=\"" + f2.name + "\">" + s);
+                                }
+                                else if ((j == t2.Text.length ()) && f2.enable_style) {
+                                    if (f2.bold == "-1") {
+                                        s += "</b>";
+                                    }
+                                    if (f2.italic == "-1") {
+                                        s += "</i>";
+                                    }
                                     t.AddString (s + "</font>");
+                                }
                                 else
                                     t.AddString (s);
                                 j++;
@@ -426,12 +455,33 @@ public class Processing {
                                 t1.clear ();
                             }
                             foreach (string s in t1.Text) {
-                                if ((j == 1) && f2.enable_style && (j == t1.Text.length ()))
-                                    t.AddString ("<font color=\"" + f2.color + "\">" + s + "</font>");
-                                else if ((j == 1) && f2.enable_style)
-                                    t.AddString ("<font color=\"" + f2.color + "\">" + s);
-                                else if ((j == t1.Text.length ()) && f2.enable_style)
+                                if ((j == 1) && f2.enable_style && (j == t1.Text.length ())) {
+                                    if (f2.bold == "-1") {
+                                        s = "<b>" + s + "</b>";
+                                    }
+                                    if (f2.italic == "-1") {
+                                        s = "<i>" + s + "</i>";
+                                    }
+                                    t.AddString ("<font color=\"" + f2.color + "\" face=\"" + f2.name + "\">" + s + "</font>");
+                                }
+                                else if ((j == 1) && f2.enable_style) {
+                                    if (f2.bold == "-1") {
+                                        s = "<b>" + s;
+                                    }
+                                    if (f2.italic == "-1") {
+                                        s = "<i>" + s;
+                                    }
+                                    t.AddString ("<font color=\"" + f2.color + "\" face=\"" + f2.name + "\">" + s);
+                                }
+                                else if ((j == t1.Text.length ()) && f2.enable_style) {
+                                    if (f2.bold == "-1") {
+                                        s += "</b>";
+                                    }
+                                    if (f2.italic == "-1") {
+                                        s += "</i>";
+                                    }
                                     t.AddString (s + "</font>");
+                                }
                                 else
                                     t.AddString (s);
                                 j++;
@@ -446,9 +496,9 @@ public class Processing {
                             t1.clear ();
                         }
                         if (t1.Top && f1.enable_style) {
-                            t1.AddColor (f1.color);
+                            t1.AddColor (f1);
                         } else if (t1.Bottom && f2.enable_style) {
-                            t1.AddColor (f2.color);
+                            t1.AddColor (f2);
                         }
                         srt_output (t1, enc, dos);
                     }
@@ -461,9 +511,9 @@ public class Processing {
                     t1.clear ();
                 }
                 if (t1.Top && f1.enable_style) {
-                    t1.AddColor (f1.color);
+                    t1.AddColor (f1);
                 } else if (t1.Bottom && f2.enable_style) {
-                    t1.AddColor (f2.color);
+                    t1.AddColor (f2);
                 }
                 srt_output (t1, enc, dos);
             }

@@ -107,9 +107,13 @@ public class FileSource : Gtk.Bin {
             clear_style_btn.add (image);
             hbox_tools.pack_end (clear_style_btn, false, false, 0);
 
-            enable_style_btn = new Gtk.ToggleButton.with_label ("Enable styling");
-            enable_style_btn.tooltip_text = "Enable styling in the source";
+            //enable_style_btn = new Gtk.ToggleButton.with_label ("Enable styling");
+            enable_style_btn = new Gtk.ToggleButton ();
+            enable_style_btn.tooltip_text = "Enable styling";
             enable_style_btn.set_active (true);
+            image = new Gtk.Image ();
+            image.pixbuf = new Gdk.Pixbuf.from_file (Config.IMAGE_DIR + "/style.png");
+            enable_style_btn.add (image);
             hbox_tools.pack_end (enable_style_btn, false, false, 0);
         } else {
             label = new Gtk.Label ("Format");

@@ -26,12 +26,13 @@ public class SrtFont {
             italic = "-1";
         else
             italic = "0";
+        if (desc.get_style () == Pango.Style.OBLIQUE)
+            italic = "-1";
         if (desc.get_weight () > Pango.Weight.NORMAL)
             bold = "-1";
         else
             bold = "0";
         size = "%.0f".printf (desc.get_size () / Pango.SCALE);
-        //Debug.info ("Font", size);
     }
 
     public string name {
@@ -51,6 +52,19 @@ public class SrtFont {
         set;
         default = "0";
     }
+
+    public string underline {
+        get;
+        set;
+        default = "0";
+    }
+
+    public string strike {
+        get;
+        set;
+        default = "0";
+    }
+
     public string size {
         get;
         set;

@@ -33,8 +33,24 @@ public class Title : GLib.Object {
         _body.append (s);
     }
 
-    public void AddColor (string s) {
-        _body.first ().data = "<font color=\"" + s + "\">" + _body.first ().data;
+    public void AddColor (SrtFont f) {
+        if (f.bold == "-1") {
+            _body.first ().data = "<b>" + _body.first ().data;
+            _body.last ().data += "</b>";
+        }
+        if (f.italic == "-1") {
+            _body.first ().data = "<i>" + _body.first ().data;
+            _body.last ().data += "</i>";
+        }
+        /*if (f.underline == "-1") {
+            _body.first ().data = "<u>" + _body.first ().data;
+            _body.last ().data += "</u>";
+        }
+        if (f.strike == "-1") {
+            _body.first ().data = "<s>" + _body.first ().data;
+            _body.last ().data += "</s>";
+        }*/
+        _body.first ().data = "<font color=\"" + f.color + "\" face=\"" + f.name + "\">" + _body.first ().data;
         _body.last ().data += "</font>";
     }
 
@@ -98,15 +114,46 @@ public class Title : GLib.Object {
                 _body.nth (ind).data = s.replace ("</font>", "");
                 s = _body.nth (ind).data;
             }
-            i = s.index_of ("<font color=");
+            i = s.index_of ("<font ");
             if (i > -1) {
                 j = s.index_of (">", i);
                 if (j > -1) {
-                    //Debug.log ("title 0", s);
                     _body.nth (ind).data = s.substring (0, i) + s.substring (j + 1);
-                    //Debug.log ("title 1", s);
                 }
             }
+            if (s.index_of ("<b>") > -1) {
+                _body.nth (ind).data = s.replace ("<b>", "");
+                s = _body.nth (ind).data;
+            }
+            if (s.index_of ("</b>") > -1) {
+                _body.nth (ind).data = s.replace ("</b>", "");
+                s = _body.nth (ind).data;
+            }
+            if (s.index_of ("<i>") > -1) {
+                _body.nth (ind).data = s.replace ("<i>", "");
+                s = _body.nth (ind).data;
+            }
+            if (s.index_of ("</i>") > -1) {
+                _body.nth (ind).data = s.replace ("</i>", "");
+                s = _body.nth (ind).data;
+            }
+            // not supported formats yet
+            /*if (s.index_of ("<u>") > -1) {
+                _body.nth (ind).data = s.replace ("<u>", "");
+                s = _body.nth (ind).data;
+            }
+            if (s.index_of ("</u>") > -1) {
+                _body.nth (ind).data = s.replace ("</u>", "");
+                s = _body.nth (ind).data;
+            }
+            if (s.index_of ("<s>") > -1) {
+                _body.nth (ind).data = s.replace ("<s>", "");
+                s = _body.nth (ind).data;
+            }
+            if (s.index_of ("</s>") > -1) {
+                _body.nth (ind).data = s.replace ("</s>", "");
+                s = _body.nth (ind).data;
+            }*/
         }
     }
  }

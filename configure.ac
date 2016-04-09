@@ -22,6 +22,7 @@ AC_OUTPUT([
 Makefile
 src/Makefile
 data/icons/Makefile
+data/images/Makefile
 data/Makefile
 man/Makefile
 

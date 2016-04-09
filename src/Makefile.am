@@ -8,6 +8,7 @@ AM_CPPFLAGS = \
 	-DPACKAGE_LOCALE_DIR=\""$(localedir)"\" \
 	-DPACKAGE_SRC_DIR=\""$(srcdir)"\" \
 	-DPACKAGE_DATA_DIR=\""$(pkgdatadir)"\" \
+	-DIMAGE_DIR=\""$(pkgdatadir)/images"\" \
 	$(SRTMERGE_CFLAGS)
 
 AM_CFLAGS =\
@@ -31,4 +32,9 @@ srtmerge_LDADD = $(SRTMERGE_LIBS)
 
 
 
+EXTRA_DIST = $(ui_DATA)
 
+# Remove ui directory on uninstall
+uninstall-local:
+	-rm -r $(uidir)
+	-rm -r $(pkgdatadir)
