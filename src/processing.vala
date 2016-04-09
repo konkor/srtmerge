@@ -84,7 +84,6 @@ public class Processing {
         }
     }
 
-    private static SrtFont _f = new SrtFont (Pango.FontDescription.from_string ("Normal bold 22"));
     private static SrtFont f1;
     private static SrtFont f2;
 
@@ -101,11 +100,11 @@ public class Processing {
         }
         _top = true;
         if (top_font == null)
-            f1 = _f;
+            f1 = new SrtFont (Pango.FontDescription.from_string ("Normal bold 22"));
         else
             f1 = top_font;
         if (bot_font == null)
-            f2 = _f;
+            f2 = new SrtFont (Pango.FontDescription.from_string ("Normal bold 22"));
         else
             f2 = bot_font;
         Debug.info ("merge f1", "%s %s %s %s %s".printf (f1.name, f1.bold, f1.italic, f1.size, f1.color));

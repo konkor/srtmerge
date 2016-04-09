@@ -17,7 +17,7 @@
  * with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-public class SrtFont {
+public class SrtFont : GLib.Object {
 
     public SrtFont (Pango.FontDescription desc, string color_str = "#FFFFFF") {
         color = color_str;
@@ -44,7 +44,7 @@ public class SrtFont {
     public string bold {
         get;
         set;
-        default = "0";
+        default = "-1";
     }
 
     public string italic {
