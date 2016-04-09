@@ -101,9 +101,11 @@ public class FileSource : Gtk.Bin {
 		    color_button.rgba = rgb;
 
             clear_style_btn = new Gtk.ToggleButton ();
-            clear_style_btn.tooltip_text = "Clear old style in the source";
+            clear_style_btn.tooltip_text = "Clear the old style";
             clear_style_btn.set_active (true);
-            Gtk.Image image = new Gtk.Image.from_stock ("gtk-clear", Gtk.IconSize.BUTTON);
+            //Gtk.Image image = new Gtk.Image.from_stock ("gtk-clear", Gtk.IconSize.BUTTON);
+            Gtk.Image image = new Gtk.Image ();
+            image.pixbuf = new Gdk.Pixbuf.from_file (Config.IMAGE_DIR + "/style_clear.png");
             clear_style_btn.add (image);
             hbox_tools.pack_end (clear_style_btn, false, false, 0);
 
@@ -154,6 +156,11 @@ public class FileSource : Gtk.Bin {
         else
             filename = CustomFileChooser.set_subtitle (w, "text/x-ssa;application/x-subrip;");
         if (filename!=null) {
+            if (filename.up().has_suffix (".SRT") && (input_source == false)) {
+                combo_format.set_active (1);
+            } else if (input_source == false) {
+                combo_format.set_active (0);
+            }
             entry_path.text = filename;
         }
     }
