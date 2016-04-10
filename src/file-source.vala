@@ -165,14 +165,21 @@ public class FileSource : Gtk.Bin {
         }
     }
 
+	/*
+	 * This was the source of the error:
+	 * Gtk-CRITICAL **: gtk_entry_set_text: assertion 'GTK_IS_ENTRY (entry)'
+	 * The default value is created at construct time before the entry_path widget is
+	 * created which was in turn causing the FileSource object to not be created.
+	 * The GtkEntry text doesn't need to be intialized so the default construct property
+	 * is uneccesary and is causing the error above.
+	 */
     public string uri {
         get {
             return entry_path.text;
         }
         set {
-            entry_path.text = value;
+			entry_path.text = value;
         }
-        default = "";
     }
 
     private string _encoder = "UTF-8";

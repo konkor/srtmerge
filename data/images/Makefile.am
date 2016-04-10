@@ -6,3 +6,5 @@ Images_DATA = \
 
 EXTRA_DIST = \
         $(Images_DATA)
+
+-include $(top_srcdir)/git.mk
