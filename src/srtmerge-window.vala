@@ -29,7 +29,6 @@ public class SrtmergeWindow : Gtk.Window {
     private Gtk.InfoBar infoBar;
 	private Gtk.Box infoBox;
     private Gtk.HeaderBar hb;
-    private Gtk.Button button_add;
     private Gtk.Button button_go;
     private FileSource source1;
     private FileSource source2;
@@ -50,8 +49,8 @@ public class SrtmergeWindow : Gtk.Window {
         this.set_default (button_go);
         button_go.label = "Merge";
         button_go.tooltip_text = "Merge/Convert subtitles";
-        //image_add = new Gtk.Image.from_stock (Gtk.Stock.EXECUTE, Gtk.IconSize.BUTTON);
-        //button_go.add (image_add);
+        //Gtk.Image image = new Gtk.Image.from_stock (Gtk.Stock.EXECUTE, Gtk.IconSize.BUTTON);
+        //button_go.add (image);
         hb.pack_end (button_go);
         
         vbox1 = new Gtk.Box (Gtk.Orientation.VERTICAL, 6);
@@ -77,9 +76,7 @@ public class SrtmergeWindow : Gtk.Window {
     }
 
     private void initialize (bool gui) {
-        button_add.clicked.connect (on_add_clicked);
         button_go.clicked.connect (on_go_clicked);
-
         if (gui) {
             if (Processing.names == null) return;
             if (Processing.names[0] != "") source1.uri = Processing.names[0];
