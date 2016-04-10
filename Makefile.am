@@ -17,3 +17,6 @@ uninstall-local:
 	-rm -r $(docdir)
 
 -include $(top_srcdir)/git.mk
+
+GITIGNOREFILES = *.srt *.ass .anjuta/ .anjuta_sym_db.db Debug/ Optimized/ aclocal.m4 compile config.h.in depcomp install-sh missing test-driver
+
