@@ -4,3 +4,5 @@ appicon_DATA=scalable/apps/srtmerge.svg
 
 EXTRA_DIST = \
         $(appicon_DATA)
+
+-include $(top_srcdir)/git.mk
