@@ -10,7 +10,8 @@ srtmerge_sources = \
 	debug.vala \
 	file-source.vala \
 	custom-file-chooser.vala \
-	font.vala
+	font.vala \
+	config.vapi 
 
 AM_CPPFLAGS = \
 	-DPACKAGE_LOCALE_DIR=\""$(localedir)"\" \
@@ -31,10 +32,9 @@ srtmerge_SOURCES = \
 	$(srtmerge_sources)
 
 # the config.vapi can be loaded as a pkg
+# --pkg config --vapidir .
 srtmerge_VALAFLAGS =  \
-	--pkg gtk+-3.0 \
-	--pkg config \
-	--vapidir .
+	--pkg gtk+-3.0 
 #	-g --save-temps
 
 srtmerge_CFLAGS =  \
@@ -59,10 +59,9 @@ tests_srtmerge_SOURCES =  \
 	tests.vala
 	
 tests_srtmerge_VALAFLAGS = \
-	--pkg config \
 	--pkg gtk+-3.0 \
-	-g \
-	--vapidir .
+	-g 
+#	--vapidir .
 
 tests_srtmerge_LDFLAGS = \
 	$(srtmerge_LDFLAGS)

@@ -88,19 +88,6 @@ public class SrtmergeWindow : Gtk.Window {
         }
 	}
 
-    private void on_add_clicked () {
-        string[]? fnames = CustomFileChooser.get_filenames (this);
-        if (fnames != null) {
-            switch (fnames.length) {
-                case 1:
-                    
-                    break;
-                default:
-                    break;
-            }
-        }
-    }
-
     private void on_go_clicked () {
         bool res = Processing.merge (source1.encoder, source1.uri,
                                      source2.encoder, source2.uri,

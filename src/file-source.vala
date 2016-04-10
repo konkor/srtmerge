@@ -18,6 +18,7 @@
  */
 
 using Gtk;
+using Gdk;
 
 public class FileSource : Gtk.Bin {
     private Gtk.Box vbox1;
@@ -147,6 +148,9 @@ public class FileSource : Gtk.Bin {
 	    	});
         }
 
+        Gtk.drag_dest_set (this, DestDefaults.ALL, target_list, Gdk.DragAction.COPY);
+
+        this.drag_data_received.connect(this.on_drag_data_received);
     }
 
     private void on_button_path_clicked () {
@@ -165,14 +169,6 @@ public class FileSource : Gtk.Bin {
         }
     }
 
-	/*
-	 * This was the source of the error:
-	 * Gtk-CRITICAL **: gtk_entry_set_text: assertion 'GTK_IS_ENTRY (entry)'
-	 * The default value is created at construct time before the entry_path widget is
-	 * created which was in turn causing the FileSource object to not be created.
-	 * The GtkEntry text doesn't need to be intialized so the default construct property
-	 * is uneccesary and is causing the error above.
-	 */
     public string uri {
         get {
             return entry_path.text;
@@ -224,5 +220,23 @@ public class FileSource : Gtk.Bin {
         }
     }
 
+     private void on_drag_data_received (Widget widget, DragContext context,
+                                        int x, int y,
+                                        SelectionData selection_data,
+                                        uint target_type, uint time)
+    {
+        foreach(string uri in selection_data.get_uris ()){
+            string file = uri.replace("file://","").replace("file:/","");
+            file = Uri.unescape_string (file);
+            Debug.info ("DnD", file);
+            entry_path.text = file;
+            break;
+        }
+
+        Gtk.drag_finish (context, true, false, time);
+    }
 }
 
+const TargetEntry[] target_list = {
+    {"text/uri-list", 0, 0}
+};
