@@ -11,7 +11,8 @@ srtmerge_sources = \
 	file-source.vala \
 	custom-file-chooser.vala \
 	font.vala \
-	config.vapi 
+	config.vapi \
+	source-entry.vala 
 
 AM_CPPFLAGS = \
 	-DPACKAGE_LOCALE_DIR=\""$(localedir)"\" \

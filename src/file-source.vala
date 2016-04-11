@@ -25,7 +25,7 @@ public class FileSource : Gtk.Bin {
     private Gtk.Box hbox_title;
     private Gtk.Label label_title;
     private Gtk.Box hbox_path;
-    private Gtk.Entry entry_path;
+    private SourceEntry entry_path;
     private Gtk.Button button_path;
     private Gtk.Box hbox_tools;
     private Gtk.ComboBoxText combo_encode;
@@ -56,7 +56,7 @@ public class FileSource : Gtk.Bin {
         hbox_path = new Gtk.Box (Gtk.Orientation.HORIZONTAL, 0);
         vbox1.add (hbox_path);
 
-        entry_path = new Gtk.Entry ();
+        entry_path = new SourceEntry ();
         hbox_path.pack_start (entry_path, true, true, 6);
 
         button_path = new Gtk.Button ();
@@ -223,16 +223,13 @@ public class FileSource : Gtk.Bin {
      private void on_drag_data_received (Widget widget, DragContext context,
                                         int x, int y,
                                         SelectionData selection_data,
-                                        uint target_type, uint time)
-    {
+                                        uint target_type, uint time) {
         foreach(string uri in selection_data.get_uris ()){
             string file = uri.replace("file://","").replace("file:/","");
             file = Uri.unescape_string (file);
-            Debug.info ("DnD", file);
             entry_path.text = file;
             break;
         }
-
         Gtk.drag_finish (context, true, false, time);
     }
 }
