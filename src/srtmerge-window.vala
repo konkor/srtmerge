@@ -18,9 +18,10 @@
  */
 using Gtk;
 
-public class SrtmergeWindow : Gtk.Window {
+public class SrtmergeWindow : Gtk.ApplicationWindow {
 
-    public SrtmergeWindow (bool gui) {
+    public SrtmergeWindow (bool gui, Gtk.Application application) {
+        GLib.Object(application:application);
         build ();
         initialize (gui);
     }

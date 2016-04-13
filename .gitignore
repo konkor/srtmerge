@@ -1,9 +1,12 @@
+/*.ass
 /*.bak
 /*.lo
 /*.o
 /*.orig
 /*.rej
+/*.srt
 /*.tab.c
+/*.tar.gz
 /*~
 /.*.sw[nop]
 /.anjuta/
@@ -40,9 +43,6 @@
 /libtool
 /missing
 /so_locations
-/srtmerge-1.0.tar.gz
 /stamp-h1
 /tags
 /test-driver
-/test.ass
-/test.srt

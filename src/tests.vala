@@ -44,7 +44,7 @@ static void main (string[] args) {
 	GLib.Test.add_func ("/SrtmergeWindow/new", () => {
 		bool gui = false;
 		
-		var result = new SrtmergeWindow (gui);
+		var result = new SrtmergeWindow (gui, null);
 
 		assert(result is SrtmergeWindow);
 	});

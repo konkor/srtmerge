@@ -74,10 +74,7 @@ static int main (string[] args) {
 		return 0;
 
 	//Starting GUI
-	Gtk.init (ref args);
 	var app = new Srtmerge (gui);
 
-	Gtk.main ();
-	
-	return 0;
+	return app.run (args);
 }
