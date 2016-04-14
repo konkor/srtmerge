@@ -17,17 +17,8 @@
  * with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-using Gtk;
-
-/*
- * The main entry point is now in a separate file so it is possible to test
- * the other components. You cannot have two main entry points in the one
- * program
- */
-
 static int main (string[] args) {
 
-	int32 i = 0;
 	bool gui = false;
 	Srtmerge.debugging = false;
 	
@@ -66,8 +57,6 @@ static int main (string[] args) {
 			stdout.printf ("%s\n", Text.app_help);
 			return 0;
 		}
-		//Debug.log ("args" + i.to_string(), s);
-		i++;
 	}
 
 	if (Processing.Args (args, gui))

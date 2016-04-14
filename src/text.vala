@@ -22,8 +22,8 @@ public class Text : GLib.Object {
     public const  string app_name                  = "SubRip Merge";
     public const  string app_subtitle              = "It's the tool for 'srt' merging/converting into one single 'ass/srt' file";
     public const  string app_version               = "1.0";
-    public const  string app_website               = "https://www.google.com/";
-    public const  string app_website_label         = "www.google.com";
+    public const  string app_website               = "https://github.com/konkor/srtmerge/";
+    public const  string app_website_label         = "github";
     public static string app_comments;
     public static string app_description;
     public const  string app_copyright             = "Copyright © 2016 Kostiantyn Korienkov";

@@ -25,7 +25,7 @@
 
 public class Srtmerge : Gtk.Application 
 {
-    public SrtmergeWindow window;
+    public static SrtmergeWindow window;
     public static bool debugging;
     private bool gui;
     //private Settings settings;
@@ -36,39 +36,29 @@ public class Srtmerge : Gtk.Application
     };
 
     public Srtmerge (bool gui) {
-        Object (application_id: "org.gnome.srtmerge", flags: ApplicationFlags.FLAGS_NONE);
-        //add_action_entries (action_entries, this);
+        Object (application_id: "org.gtk.srtmerge", flags: ApplicationFlags.HANDLES_OPEN);
         this.gui = gui;
     }
 
     protected override void startup () {
         base.startup ();
+        add_action_entries (action_entries, this);
+        GLib.Menu section = new GLib.Menu ();
+        section.append_item (new GLib.MenuItem ("About", "app.about"));
+        section.append_item (new GLib.MenuItem ("Quit", "app.quit"));
+        GLib.Menu menu = new GLib.Menu ();
+        menu.append_section (null, section);
+        this.set_app_menu ((GLib.MenuModel) menu);
+        set_accels_for_action ("app.quit", {"<Primary>q"});
 
         Environment.set_application_name (Text.app_name);
 
-        //settings = new Settings ("org.gnome.srtmerge");
-        //settings.delay ();
-
-        add_action_entries (action_entries, this);
-
         window = new SrtmergeWindow (gui, this);
-        
-        //window.set_default_size (settings.get_int ("window-width"), settings.get_int ("window-height"));
-        //if (settings.get_boolean ("window-is-maximized")) window.maximize ();
-        add_window (window);
-
-        var section = new GLib.Menu ();
-        section.append_item (new GLib.MenuItem ("_About", "app.about"));
-        section.append_item (new GLib.MenuItem ("Quit", "app.quit"));
-        var menu = new GLib.Menu ();
-        menu.append_section (null, section);
-        set_app_menu (menu);
-        //set_accels_for_action ("app.quit", {"<Primary>q"});
+        window.show_all ();
     }
 
     protected override void activate () {
         window.present ();
-        window.show_all ();
     }
 
     private void quit_cb () {
@@ -81,15 +71,19 @@ public class Srtmerge : Gtk.Application
 
     private void about_cb () {
         string[] authors = {
-          "Me",
+          "Kostiantyn Korienkov",
           null
         };
         Gtk.show_about_dialog (window,
-                               "name", "SubRip Merge",
-                               "copyright", "Copyright © 2016 Me",
+                               "name", Text.app_name,
+                               "copyright", Text.app_copyright,
                                "license-type", Gtk.License.GPL_3_0,
                                "authors", authors,
-                               null);
+                               "website", Text.app_website,
+		                       "website-label", Text.app_name,
+                               "version", Text.app_version,
+                               "logo_icon_name", "srtmerge",
+                                null);
     }
 
     
