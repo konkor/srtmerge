@@ -11,7 +11,6 @@ srtmerge_sources = \
 	file-source.vala \
 	custom-file-chooser.vala \
 	font.vala \
-	config.vapi \
 	source-entry.vala 
 
 AM_CPPFLAGS = \
@@ -30,6 +29,7 @@ bin_PROGRAMS = srtmerge
 # the main.vala contains the main() entry point
 srtmerge_SOURCES = \
 	main.vala \
+	config.vapi \
 	$(srtmerge_sources)
 
 # the config.vapi can be loaded as a pkg

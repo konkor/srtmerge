@@ -42,24 +42,24 @@ public class FileSource : Gtk.Bin {
         w = _w;
         this.input_source = input_source;
 
-        vbox1 = new Gtk.Box (Gtk.Orientation.VERTICAL, 6);
+        vbox1 = new Box (Orientation.VERTICAL, 6);
         add (vbox1);
 
-        hbox_title = new Gtk.Box (Gtk.Orientation.HORIZONTAL, 6);
+        hbox_title = new Box (Orientation.HORIZONTAL, 6);
         vbox1.add (hbox_title);
 
-        label_title = new Gtk.Label (title);
+        label_title = new Label (title);
         label_title.set_alignment (0, 0.5F);
         label_title.override_font (Pango.FontDescription.from_string ("Normal bold"));
         hbox_title.pack_start (label_title, false, false, 6);
 
-        hbox_path = new Gtk.Box (Gtk.Orientation.HORIZONTAL, 0);
+        hbox_path = new Box (Orientation.HORIZONTAL, 0);
         vbox1.add (hbox_path);
 
         entry_path = new SourceEntry ();
         hbox_path.pack_start (entry_path, true, true, 6);
 
-        button_path = new Gtk.Button ();
+        button_path = new Button ();
         button_path.can_focus = true;
 		button_path.use_underline = true;
         button_path.label = "...";
@@ -67,12 +67,12 @@ public class FileSource : Gtk.Bin {
         button_path.clicked.connect (on_button_path_clicked);
         hbox_path.pack_end (button_path, false, false, 0);
 
-        hbox_tools = new Gtk.Box (Gtk.Orientation.HORIZONTAL, 6);
+        hbox_tools = new Box (Orientation.HORIZONTAL, 6);
         vbox1.add (hbox_tools);
 
-        Gtk.Label label = new Gtk.Label ("Encoding");
+        Gtk.Label label = new Label ("Encoding");
         
-        combo_encode = new Gtk.ComboBoxText.with_entry ();
+        combo_encode = new ComboBoxText.with_entry ();
         combo_encode.append_text ("");
         foreach (string s in Text.encodings) {
             combo_encode.append_text (s);
@@ -83,17 +83,17 @@ public class FileSource : Gtk.Bin {
         hbox_title.pack_end (label, false, false, 0);
 
         if (input_source) {
-            label = new Gtk.Label ("Font");
+            label = new Label ("Font");
             hbox_tools.add (label);
 
-            font_button = new Gtk.FontButton ();
+            font_button = new FontButton ();
             hbox_tools.add (font_button);
             Pango.FontDescription font = font_button.get_font_desc ();
             font.set_size (22 * Pango.SCALE);
             font.set_weight (Pango.Weight.BOLD);
             font_button.set_font_desc (font);
 
-            color_button = new Gtk.ColorButton ();
+            color_button = new ColorButton ();
             hbox_tools.add (color_button);
             Gdk.RGBA rgb = Gdk.RGBA ();
 		    //bool tmp = rgb.parse ("#FFFFFF");
@@ -101,11 +101,11 @@ public class FileSource : Gtk.Bin {
             rgb.parse (_color);
 		    color_button.rgba = rgb;
 
-            clear_style_btn = new Gtk.ToggleButton ();
+            clear_style_btn = new ToggleButton ();
             clear_style_btn.tooltip_text = "Clear the old style";
             clear_style_btn.set_active (true);
-            //Gtk.Image image = new Gtk.Image.from_stock ("gtk-clear", Gtk.IconSize.BUTTON);
-            Gtk.Image image = new Gtk.Image ();
+            //Gtk.Image image = new Gtk.Image.from_stock ("gtk-clear", IconSize.BUTTON);
+            Gtk.Image image = new Image ();
             image.pixbuf = new Gdk.Pixbuf.from_file (Config.IMAGE_DIR + "/style_clear.png");
             clear_style_btn.add (image);
             hbox_tools.pack_end (clear_style_btn, false, false, 0);

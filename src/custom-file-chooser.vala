@@ -29,13 +29,13 @@ public class CustomFileChooser : Gtk.FileChooserDialog {
         if (title != null) set_title (title);
         set_transient_for (w);
         base.action = action;
-        add_button ("_Cancel", Gtk.ResponseType.CANCEL);
+        add_button ("_Cancel", ResponseType.CANCEL);
         if (action == FileChooserAction.CREATE_FOLDER)
-            add_button ("Create", Gtk.ResponseType.ACCEPT);
+            add_button ("Create", ResponseType.ACCEPT);
         else if (action == FileChooserAction.SAVE) 
-            add_button ("_Save", Gtk.ResponseType.ACCEPT);
+            add_button ("_Save", ResponseType.ACCEPT);
         else
-            add_button ("_Open", Gtk.ResponseType.ACCEPT);
+            add_button ("_Open", ResponseType.ACCEPT);
         //GLib.Environment.get_user_special_dir (GLib.UserDirectory.DOCUMENTS)
         if (current_folder !=null)
             set_current_folder (current_folder);
@@ -79,7 +79,7 @@ public class CustomFileChooser : Gtk.FileChooserDialog {
     public static string[]? filenames (Gtk.Window? w = null,
                                        bool select_multiple = true,
                                        string? title = null,
-                                       Gtk.FileChooserAction action = Gtk.FileChooserAction.OPEN,
+                                       Gtk.FileChooserAction action = FileChooserAction.OPEN,
                                        string? filter_name = null,
                                        string? mimetypes = null) {
         string _title = "Select file(s)";
@@ -87,14 +87,14 @@ public class CustomFileChooser : Gtk.FileChooserDialog {
         CustomFileChooser dialog = new CustomFileChooser (w, _title, action);
 		dialog.select_multiple = select_multiple;
         if (filter_name!=null && mimetypes!=null) {
-            Gtk.FileFilter filter_text = new Gtk.FileFilter ();
+            Gtk.FileFilter filter_text = new FileFilter ();
 	    	filter_text.set_filter_name ("Subtitle files");
             foreach (string s in mimetypes.split(";")) {
 	    		if (s != "") filter_text.add_mime_type (s);
 	    	}
 	    	dialog.add_filter (filter_text);
 
-	    	filter_text = new Gtk.FileFilter ();
+	    	filter_text = new FileFilter ();
 	    	filter_text.set_filter_name ("Any files");
 	    	filter_text.add_pattern ("*");
 	    	dialog.add_filter(filter_text);
@@ -110,21 +110,21 @@ public class CustomFileChooser : Gtk.FileChooserDialog {
                                            string? title = null,
                                            string? filter_name = null,
                                            string? mimetypes = null) {
-		return filenames (w, true, title, Gtk.FileChooserAction.OPEN, filter_name, mimetypes);
+		return filenames (w, true, title, FileChooserAction.OPEN, filter_name, mimetypes);
 	}
 
     public static string[]? save_filenames (Gtk.Window? w = null,
                                             string? title = null,
                                             string? filter_name = null,
                                             string? mimetypes = null) {
-		return filenames (w, true, title, Gtk.FileChooserAction.SAVE, filter_name, mimetypes);
+		return filenames (w, true, title, FileChooserAction.SAVE, filter_name, mimetypes);
 	}
 
     public static string? get_filename (Gtk.Window? w = null,
                                         string? title = null,
                                         string? filter_name = null,
                                         string? mimetypes = null) {
-		string[]? s = filenames (w, false, title, Gtk.FileChooserAction.OPEN, filter_name, mimetypes);
+		string[]? s = filenames (w, false, title, FileChooserAction.OPEN, filter_name, mimetypes);
 		if (s != null)
 			return s[0];
 		else
@@ -135,7 +135,7 @@ public class CustomFileChooser : Gtk.FileChooserDialog {
                                          string? title = null,
                                          string? filter_name = null,
                                          string? mimetypes = null) {
-		string[]? s = filenames (w, false, title, Gtk.FileChooserAction.SAVE, filter_name, mimetypes);
+		string[]? s = filenames (w, false, title, FileChooserAction.SAVE, filter_name, mimetypes);
 		if (s != null)
 			return s[0];
 		else
