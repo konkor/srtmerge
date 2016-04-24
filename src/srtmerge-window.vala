@@ -52,6 +52,7 @@ public class SrtmergeWindow : Gtk.ApplicationWindow {
         button_go.tooltip_text = "Merge/Convert subtitles";
         //Gtk.Image image = new Gtk.Image.from_stock (Gtk.Stock.EXECUTE, Gtk.IconSize.BUTTON);
         //button_go.add (image);
+        button_go.get_style_context ().add_class ("suggested-action");
         hb.pack_end (button_go);
         
         vbox1 = new Gtk.Box (Gtk.Orientation.VERTICAL, 6);
