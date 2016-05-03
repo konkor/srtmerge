@@ -41,12 +41,11 @@ static void main (string[] args) {
 	 * on program startup in just a few seconds:
 	 * Gtk-CRITICAL **: gtk_entry_set_text: assertion 'GTK_IS_ENTRY (entry)'
 	 */
-	GLib.Test.add_func ("/SrtmergeWindow/new", () => {
+	GLib.Test.add_func ("/Srtmerge/new", () => {
 		bool gui = false;
-		
-		var result = new SrtmergeWindow (gui, null);
+		var result = new Srtmerge (gui);
 
-		assert(result is SrtmergeWindow);
+		assert(result is Srtmerge);
 	});
 
 	GLib.Test.add_func ("/SrtMerge/new", () => {

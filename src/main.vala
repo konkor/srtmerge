@@ -65,5 +65,5 @@ static int main (string[] args) {
 	//Starting GUI
 	var app = new Srtmerge (gui);
 
-	return app.run (args);
+	return app.run ();
 }
