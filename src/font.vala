@@ -94,7 +94,7 @@ public class SrtFont : GLib.Object {
 
     private bool _enable_style = true;
     public bool enable_style {
-        get { return _enable_style && (color != "#FFFFFF");}
+        get { return _enable_style;}
         set { _enable_style = value;}
     }
 }

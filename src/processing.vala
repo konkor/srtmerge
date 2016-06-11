@@ -332,7 +332,7 @@ public class Processing {
             if (fn.length == 0) {
                 stdout.printf ("%s\r\n", s);
             } else {
-                dos.put_string (s+ "\r\n");
+                dos.put_string (s + "\r\n");
             }
         }
         return true;
@@ -342,7 +342,7 @@ public class Processing {
         File file;
         DataOutputStream? dos = null;
         uint i = 0, n = timeline.length (), index = 1;
-        TimeSpan d = 0, d1 = 0, d2 = 0;
+        TimeSpan d = 0, d1 = 0, d3;
         Title t1, t2, t3, t;
 
         if (fn.length != 0) {
@@ -360,34 +360,38 @@ public class Processing {
                 Debug.error ("export_srt", e.message);
             }
         }
+        //apply style
+        for (i = 0; i < n; i++) {
+            t1 = (Title) timeline.nth (i).data;
+            if ((t1.Top && f1.clear_style) || (t1.Bottom && f2.clear_style)) {
+                t1.clear ();
+            }
+            if (t1.Top && f1.enable_style) {
+                t1.AddColor (f1);
+            } else if (t1.Bottom && f2.enable_style) {
+                t1.AddColor (f2);
+            }
+        }
         for (i = 0; i < n; i++) {
             t1 = (Title) timeline.nth (i).data;
             if (i + 1 < n) {
                 t2 = (Title) timeline.nth (i + 1).data;
                 if (t1.Top == t2.Top) {
                     t1.Number = index;
-                    if (t1.Top && f1.clear_style) {
-                        t1.clear ();
-                    } else if (t1.Bottom && f2.clear_style) {
-                        t1.clear ();
-                    }
-                    if (t1.Top && f1.enable_style) {
-                        t1.AddColor (f1);
-                    } else if (t1.Bottom && f2.enable_style) {
-                        t1.AddColor (f2);
-                    }
                     srt_output (t1, enc, dos);
                 } else {
                     d = (int64) t2.Start.difference ( t1.Start);
                     d1 = (int64) t1.End.difference ( t2.Start);
-                    //Debug.log ("d", "%jd = %s - %s".printf (d, t1.Start.format("%T"), t2.Start.format("%T")));
-                    //Debug.log ("d1", "%jd = %s - %s".printf (d1, t2.Start.format("%T"), t1.End.format("%T")));
-                    if (d < 500000 && d1>100000) {
-                        d2 = 0;
-                        if (i+2<n) {
-                            t3 = (Title) timeline.nth (i + 1).data;
-                            if (t2.Top != t3.Top) {
-                                d2 = (int64) t2.End.difference ( t3.Start);
+                    Debug.log ("index", "%u".printf (index));
+                    Debug.log ("d", "%jd = %s - %s".printf (d, t1.Start.format("%T"), t2.Start.format("%T")));
+                    Debug.log ("d1", "%jd = %s - %s".printf (d1, t2.Start.format("%T"), t1.End.format("%T")));
+                    //if (d < 500000 && d1>100000) {
+                    if (d1 > 500000) {
+                        d3 = 0;
+                        if (i + 2 < n) {
+                            t3 = (Title) timeline.nth (i + 2).data;
+                            if (t1.Top != t3.Top) {
+                                d3 = (int64) t1.End.difference ( t3.Start);
                             }
                         }
                         if (t1.Top) {
@@ -396,145 +400,38 @@ public class Processing {
                             t = t2;
                         }
                         t.Number = index;
-                        t.Start = minimum_time (t1, t2);
-                        if (t.Top && f1.clear_style) {
-                            t.clear ();
-                        } else if (t.Bottom && f2.clear_style) {
-                            t.clear ();
-                        }
-                        if (f1.enable_style) {
-                            t.AddColor (f1);
-                        }
-                        if (d2 < 500000) {
-                            i++;
-                        } else {
-                            t.End = maximum_time (t1, t2);
-                        }
-                        uint j = 1;
+                        t.Start = t1.Start;
                         if (t1.Top) {
-                            if (f2.clear_style) {
-                                t2.clear ();
-                            }
                             foreach (string s in t2.Text) {
-                                if ((j == 1) && f2.enable_style && (j == t2.Text.length ())) {
-                                    if (f2.bold == "-1") {
-                                        s = "<b>" + s;
-                                        s += "</b>";
-                                    }
-                                    if (f2.italic == "-1") {
-                                        s = "<i>" + s;
-                                        s += "</i>";
-                                    }
-                                    t.AddString ("<font color=\"" + f2.color + "\" face=\"" + f2.name + "\">" + s + "</font>");
-                                }
-                                else if ((j == 1) && f2.enable_style) {
-                                    if (f2.bold == "-1") {
-                                        s = "<b>" + s;
-                                    }
-                                    if (f2.italic == "-1") {
-                                        s = "<i>" + s;
-                                    }
-                                    t.AddString ("<font color=\"" + f2.color + "\" face=\"" + f2.name + "\">" + s);
-                                }
-                                else if ((j == t2.Text.length ()) && f2.enable_style) {
-                                    if (f2.bold == "-1") {
-                                        s += "</b>";
-                                    }
-                                    if (f2.italic == "-1") {
-                                        s += "</i>";
-                                    }
-                                    t.AddString (s + "</font>");
-                                }
-                                else
-                                    t.AddString (s);
-                                j++;
+                                t.AddString (s);
                             }
                         } else {
-                            if (f1.clear_style) {
-                                t1.clear ();
-                            }
                             foreach (string s in t1.Text) {
-                                if ((j == 1) && f2.enable_style && (j == t1.Text.length ())) {
-                                    if (f2.bold == "-1") {
-                                        s = "<b>" + s + "</b>";
-                                    }
-                                    if (f2.italic == "-1") {
-                                        s = "<i>" + s + "</i>";
-                                    }
-                                    t.AddString ("<font color=\"" + f2.color + "\" face=\"" + f2.name + "\">" + s + "</font>");
-                                }
-                                else if ((j == 1) && f2.enable_style) {
-                                    if (f2.bold == "-1") {
-                                        s = "<b>" + s;
-                                    }
-                                    if (f2.italic == "-1") {
-                                        s = "<i>" + s;
-                                    }
-                                    t.AddString ("<font color=\"" + f2.color + "\" face=\"" + f2.name + "\">" + s);
-                                }
-                                else if ((j == t1.Text.length ()) && f2.enable_style) {
-                                    if (f2.bold == "-1") {
-                                        s += "</b>";
-                                    }
-                                    if (f2.italic == "-1") {
-                                        s += "</i>";
-                                    }
-                                    t.AddString (s + "</font>");
-                                }
-                                else
-                                    t.AddString (s);
-                                j++;
+                                t.AddString (s);
                             }
                         }
                         srt_output (t, enc, dos);
+                        if ((t2.Duration - d1) < 500000) {
+                            i++;
+                        } else {
+                            t2.Start = t1.End;
+                        }
+                        if (d3 > 500000) {
+                            t1.Start = t2.End;
+                            t2 = t1;
+                        }
                     } else {
                         t1.Number = index;
-                        if (t1.Top && f1.clear_style) {
-                            t1.clear ();
-                        } else if (t1.Bottom && f2.clear_style) {
-                            t1.clear ();
-                        }
-                        if (t1.Top && f1.enable_style) {
-                            t1.AddColor (f1);
-                        } else if (t1.Bottom && f2.enable_style) {
-                            t1.AddColor (f2);
-                        }
                         srt_output (t1, enc, dos);
                     }
                 }
             } else {
                 t1.Number = index;
-                if (t1.Top && f1.clear_style) {
-                    t1.clear ();
-                } else if (t1.Bottom && f2.clear_style) {
-                    t1.clear ();
-                }
-                if (t1.Top && f1.enable_style) {
-                    t1.AddColor (f1);
-                } else if (t1.Bottom && f2.enable_style) {
-                    t1.AddColor (f2);
-                }
                 srt_output (t1, enc, dos);
             }
             index++;
         }
         return true;
-    }
-
-    private static DateTime minimum_time (Title t1, Title t2) {
-        if (t1.Start.compare (t2.Start) == 1) {
-            return t2.Start;
-        } else {
-            return t1.Start;
-        }
-    }
-
-    private static DateTime maximum_time (Title t1, Title t2) {
-        if (t1.End.compare (t2.End) == 1) {
-            return t1.End;
-        } else {
-            return t2.End;
-        }
     }
 
     private static void srt_output (Title t, string enc, DataOutputStream? dos = null) {

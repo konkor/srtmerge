@@ -51,30 +51,30 @@ srtmerge_LDADD = $(SRTMERGE_LIBS)
 
 ### Unit tests for SrtMerge
 ### to run $ make check
-TESTS = tests_srtmerge
-check_PROGRAMS = tests_srtmerge
+#TESTS = tests_srtmerge
+#check_PROGRAMS = tests_srtmerge
 
 # the entry point and test methods for the test program
-tests_srtmerge_SOURCES =  \
-	$(srtmerge_sources) \
-	tests.vala
+#tests_srtmerge_SOURCES =  \
+#	$(srtmerge_sources) \
+#	tests.vala
 	
-tests_srtmerge_VALAFLAGS = \
-	--pkg gtk+-3.0 \
-	-g 
-#	--vapidir .
+#tests_srtmerge_VALAFLAGS = \
+#	--pkg gtk+-3.0 \
+#	-g 
+##	--vapidir .
 
-tests_srtmerge_LDFLAGS = \
-	$(srtmerge_LDFLAGS)
+#tests_srtmerge_LDFLAGS = \
+#	$(srtmerge_LDFLAGS)
 
-tests_srtmerge_LDADD = \
-	$(srtmerge_LDADD)
+#tests_srtmerge_LDADD = \
+#	$(srtmerge_LDADD)
 	
-tests_srtmerge_CPPFLAGS = \
-	$(AM_CPPFLAGS)
+#tests_srtmerge_CPPFLAGS = \
+#	$(AM_CPPFLAGS)
 	
-tests_srtmerge_CFLAGS = \
-	$(AM_CFLAGS)
+#tests_srtmerge_CFLAGS = \
+#	$(AM_CFLAGS)
 
 EXTRA_DIST = $(ui_DATA)
 

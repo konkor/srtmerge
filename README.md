@@ -22,7 +22,7 @@ sudo make install
 
 ### Source and packages
 * [GitHub](https://github.com/konkor/srtmerge)
+* [Debian/Ubuntu x64 deb](https://www.dropbox.com/s/h5r8lkmuem1n9nx/srtmerge_1.0-1_amd64.deb?dl=1)
 
 ## Screenshots
 ![](/data/screenshots/screenshots.png?raw=true)
-
