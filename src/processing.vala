@@ -145,6 +145,7 @@ public class Processing {
             string line, s;
             while ((line = dis.read_line (null)) != null) {
                 //stdout.printf ("[%d]%s\n", line.length, line);
+                line = line.replace ("\r", "");
                 if (line == "") {
                     //stdout.printf ("[%d]\n", t.Number);
                     if (t.Number > 0) {
@@ -165,7 +166,7 @@ public class Processing {
                     }
                     switch (pos) {
                         case 0:
-                            t.Number = int.parse (s);
+                            t.Number = int.parse (s.strip ());
                             break;
                         case 1:
                             int i = s.index_of (" --> ");
@@ -312,7 +313,7 @@ public class Processing {
             if (fn.length == 0) {
                 stdout.printf ("%s\r\n", s);
             } else {
-                dos.put_string (s + "\r\n");
+                try {dos.put_string (s + "\r\n");} catch (Error e) {Debug.error ("export_ass", e.message);}
             }
         }
         foreach (Title t in timeline) {
@@ -332,7 +333,7 @@ public class Processing {
             if (fn.length == 0) {
                 stdout.printf ("%s\r\n", s);
             } else {
-                dos.put_string (s + "\r\n");
+                try {dos.put_string (s + "\r\n");} catch (Error e) {Debug.error ("export_ass", e.message);}
             }
         }
         return true;

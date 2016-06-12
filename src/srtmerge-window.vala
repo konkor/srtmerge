@@ -106,8 +106,8 @@ public class SrtmergeWindow : Gtk.ApplicationWindow {
     public int show_message (string text, MessageType type = MessageType.INFO) {
         if (infoBar != null) infoBar.destroy ();
         if (type == Gtk.MessageType.QUESTION) {
-            infoBar = new InfoBar.with_buttons (Gtk.Stock.YES, Gtk.ResponseType.YES,
-                                                Gtk.Stock.CANCEL, Gtk.ResponseType.CANCEL);
+            infoBar = new InfoBar.with_buttons ("gtk-yes", Gtk.ResponseType.YES,
+                                                "gtk-cancel", Gtk.ResponseType.CANCEL);
         } else {
             infoBar = new InfoBar.with_buttons ("gtk-close", Gtk.ResponseType.CLOSE);
             infoBar.set_default_response (Gtk.ResponseType.OK);

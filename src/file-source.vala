@@ -73,10 +73,11 @@ public class FileSource : Gtk.Bin {
         Gtk.Label label = new Label ("Encoding");
         
         combo_encode = new ComboBoxText.with_entry ();
-        combo_encode.append_text ("");
+        //combo_encode.append_text ("");
         foreach (string s in Text.encodings) {
             combo_encode.append_text (s);
         }
+        combo_encode.wrap_width = 4;
         Entry entry = (Entry)combo_encode.get_child();
         entry.text = "UTF-8";
         hbox_title.pack_end (combo_encode, false, false, 0);
@@ -89,8 +90,8 @@ public class FileSource : Gtk.Bin {
             font_button = new FontButton ();
             hbox_tools.add (font_button);
             Pango.FontDescription font = font_button.get_font_desc ();
-            font.set_size (22 * Pango.SCALE);
-            font.set_weight (Pango.Weight.BOLD);
+            font.set_size (21 * Pango.SCALE);
+            //font.set_weight (Pango.Weight.BOLD);
             font_button.set_font_desc (font);
 
             color_button = new ColorButton ();
@@ -104,18 +105,20 @@ public class FileSource : Gtk.Bin {
             clear_style_btn = new ToggleButton ();
             clear_style_btn.tooltip_text = "Clear the old style";
             clear_style_btn.set_active (true);
-            //Gtk.Image image = new Gtk.Image.from_stock ("gtk-clear", IconSize.BUTTON);
             Gtk.Image image = new Image ();
-            image.pixbuf = new Gdk.Pixbuf.from_file (Config.IMAGE_DIR + "/style_clear.png");
+            try {
+                image.pixbuf = new Gdk.Pixbuf.from_file (Config.IMAGE_DIR + "/style_clear.png");
+            } catch (Error e) { Debug.error ("filesource", e.message);}
             clear_style_btn.add (image);
             hbox_tools.pack_end (clear_style_btn, false, false, 0);
 
-            //enable_style_btn = new Gtk.ToggleButton.with_label ("Enable styling");
             enable_style_btn = new Gtk.ToggleButton ();
             enable_style_btn.tooltip_text = "Enable styling";
             enable_style_btn.set_active (true);
             image = new Gtk.Image ();
-            image.pixbuf = new Gdk.Pixbuf.from_file (Config.IMAGE_DIR + "/style.png");
+            try {
+                image.pixbuf = new Gdk.Pixbuf.from_file (Config.IMAGE_DIR + "/style.png");
+            } catch (Error e) { Debug.error ("filesource", e.message);}
             enable_style_btn.add (image);
             hbox_tools.pack_end (enable_style_btn, false, false, 0);
         } else {
@@ -131,7 +134,6 @@ public class FileSource : Gtk.Bin {
 
             combo_format.changed.connect (() => {
                 string s = combo_format.get_active_text ();
-                //clear_style.sensitive = s == "SRT";
                 if (entry_path.text.strip ().length == 0) return;
                 if (entry_path.text.up ().has_suffix (".ASS")) {
                     if (s == "SRT") {
