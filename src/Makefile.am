@@ -36,7 +36,7 @@ srtmerge_SOURCES = \
 # --pkg config --vapidir .
 srtmerge_VALAFLAGS =  \
 	--pkg gtk+-3.0 
-#	-g --save-temps
+#    -g --save-temps
 
 srtmerge_CFLAGS =  \
 	$(AM_CFLAGS)

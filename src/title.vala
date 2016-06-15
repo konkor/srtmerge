@@ -115,11 +115,13 @@ public class Title : GLib.Object {
                 s = _body.nth (ind).data;
             }
             i = s.index_of ("<font ");
-            if (i > -1) {
+            while (i > -1) {
                 j = s.index_of (">", i);
                 if (j > -1) {
                     _body.nth (ind).data = s.substring (0, i) + s.substring (j + 1);
+                    s = _body.nth (ind).data;
                 }
+                i = s.index_of ("<font ");
             }
             if (s.index_of ("<b>") > -1) {
                 _body.nth (ind).data = s.replace ("<b>", "");

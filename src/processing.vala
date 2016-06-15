@@ -148,11 +148,12 @@ public class Processing {
                 line = line.replace ("\r", "");
                 if (line == "") {
                     //stdout.printf ("[%d]\n", t.Number);
-                    if (t.Number > 0) {
+                    if ((t.Number > 0) && (t.Text.length () > 0)) {
                         timeline.append (t);
                         t= new Title (_top);
+                        pos = 0;
                     }
-                    pos = 0;
+                    if (t.Number == 0) pos = 0;
                 } else {
                     if (enc != "") {
                         try {
