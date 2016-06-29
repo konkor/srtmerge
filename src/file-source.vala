@@ -58,6 +58,9 @@ public class FileSource : Gtk.Bin {
 
         entry_path = new SourceEntry ();
         hbox_path.pack_start (entry_path, true, true, 6);
+        entry_path.changed.connect (()=>{
+            if (input_source == false) check_format (entry_path.text);
+        });
 
         button_path = new Button ();
         button_path.can_focus = true;
@@ -162,12 +165,18 @@ public class FileSource : Gtk.Bin {
         else
             filename = CustomFileChooser.set_subtitle (w, "text/x-ssa;application/x-subrip;");
         if (filename!=null) {
-            if (filename.up().has_suffix (".SRT") && (input_source == false)) {
-                combo_format.set_active (1);
-            } else if (input_source == false) {
-                combo_format.set_active (0);
+            if (input_source == false) {
+                check_format (filename);
             }
             entry_path.text = filename;
+        }
+    }
+
+    private void check_format (string s) {
+        if (s.up().has_suffix (".SRT")) {
+            combo_format.set_active (1);
+        } else {
+            combo_format.set_active (0);
         }
     }
 
@@ -232,6 +241,7 @@ public class FileSource : Gtk.Bin {
             entry_path.text = file;
             break;
         }
+        check_format (entry_path.text);
         Gtk.drag_finish (context, true, false, time);
     }
 }

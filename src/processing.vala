@@ -178,7 +178,7 @@ public class Processing {
                             }
                             break;
                         default:
-                            t.AddString (s);
+                            t.AddString (s.strip ());
                             break;
                     }
                     pos++;
